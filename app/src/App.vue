@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <Header></Header>
-    <Footer></Footer>
+    <!-- 路由组件出口 -->
+    <router-view></router-view>
+    <Footer v-show="$route.meta.show"></Footer>
   </div>
 </template>
 
