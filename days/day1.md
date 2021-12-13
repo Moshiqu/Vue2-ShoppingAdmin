@@ -118,3 +118,17 @@ Footer组件:在Login,Register隐藏
 
 6.1 可以根据组件身上的$route获取当前路由信息, 通过路由路径判断Footer显示与隐藏
 6.2 配置路由的时候, 可以给路由添加路由元信息【meta】, 路由需要配置对象, 它的key不能乱写
+
+
+8.路由传参
+
+8.1 路由跳转有几种方式
+比如: A->B
+声明式导航: router-link (务必要有to属性), 可以实现路由的跳转
+编程式导航: 利用的是组件实例的$router.push|replace方法, 可以实现路由的跳转,(书写一些自己的业务逻辑)
+
+8.0 路由传参, 传参有几种写法?
+params参数: 属于路径当中的一部分, 需要注意, 在配置路由的时候, 需要占位
+query参数: 不属于路径当中的一部分, 类似于ajax中的queryString,  /home?k=v&kv=, 不需要占位
+一般使用对象的形式进行参数传递
+    this.$router.push({name:'search',params:{keyword:this.keyword},query:{k:this.keyword.toUpperCase()}})
