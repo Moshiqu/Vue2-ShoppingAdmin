@@ -2,7 +2,41 @@
     <!-- 商品分类导航 -->
     <div class="type-nav">
         <div class="container">
-            <h2 class="all">全部商品分类</h2>
+            <div @mouseleave="initCurrentIndex">
+                <h2 class="all">全部商品分类</h2>
+                <div class="sort">
+                    <div class="all-sort-list2">
+                        <div
+                            class="item"
+                            v-for="(c1,index) in categoryList"
+                            :key="c1.categoryId"
+                            :class="{ itemActive: currentIndex == index }"
+                        >
+                            <h3 @mouseenter="changeCurrentIndex(index)">
+                                <a href>{{ c1.categoryName }}</a>
+                            </h3>
+                            <div class="item-list clearfix" :style="{display:currentIndex == index?'block':'none'}">
+                                <div
+                                    class="subitem"
+                                    v-for="c2 in c1.categoryChild"
+                                    :key="c2.categoryId"
+                                >
+                                    <dl class="fore">
+                                        <dt>
+                                            <a href>{{ c2.categoryName }}</a>
+                                        </dt>
+                                        <dd>
+                                            <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
+                                                <a href>{{ c3.categoryName }}</a>
+                                            </em>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <nav class="nav">
                 <a href="###">服装城</a>
                 <a href="###">美妆馆</a>
@@ -13,42 +47,20 @@
                 <a href="###">有趣</a>
                 <a href="###">秒杀</a>
             </nav>
-            <div class="sort">
-                <div class="all-sort-list2">
-                    <div class="item" v-for="c1 in categoryList" :key="c1.categoryId">
-                        <h3>
-                            <a href>{{c1.categoryName}}</a>
-                        </h3>
-                        <div class="item-list clearfix">
-                            <div class="subitem" v-for="c2 in c1.categoryChild" :key="c2.categoryId">
-                                <dl class="fore">
-                                    <dt>
-                                        <a href>{{c2.categoryName}}</a>
-                                    </dt>
-                                    <dd>
-                                        <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
-                                            <a href>{{c3.categoryName}}</a>
-                                        </em>
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </template>
 
 <script>
 import { mapState } from "vuex"
+import throttle from 'lodash/throttle'
 
 export default {
     name: 'TypeNav',
-    // 组件挂载完毕, 可以向服务器发送请求
-    mounted() {
-        // 通知vuex发送请求, 存储到仓库中
-        this.$store.dispatch('getCategoryList')
+    data() {
+        return {
+            currentIndex: -1
+        }
     },
     computed: {
         ...mapState({
@@ -57,6 +69,22 @@ export default {
             categoryList: state => state.home.categoryList
         })
     },
+    // 组件挂载完毕, 可以向服务器发送请求
+    mounted() {
+        // 通知vuex发送请求, 存储到仓库中
+        this.$store.dispatch('getCategoryList')
+    },
+    methods: {
+        // changeCurrentIndex(index) {
+        //     this.currentIndex = index
+        // },
+        changeCurrentIndex: throttle(function(index){
+            this.currentIndex = index
+        },50),
+        initCurrentIndex() {
+            this.currentIndex = -1
+        }
+    },
 }
 </script>
 
@@ -64,6 +92,9 @@ export default {
 .type-nav {
     border-bottom: 2px solid #e1251b;
 
+    a {
+        text-decoration: none;
+    }
     .container {
         width: 1200px;
         margin: 0 auto;
@@ -96,7 +127,7 @@ export default {
             left: 0;
             top: 45px;
             width: 210px;
-            height: 461px;
+            height: 464px;
             position: absolute;
             background: #fafafa;
             z-index: 999;
@@ -117,7 +148,7 @@ export default {
                     }
 
                     .item-list {
-                        display: none;
+                        // display: none;
                         position: absolute;
                         width: 734px;
                         min-height: 460px;
@@ -170,11 +201,15 @@ export default {
                         }
                     }
 
-                    &:hover {
-                        .item-list {
-                            display: block;
-                        }
-                    }
+                    // &:hover {
+                    //     .item-list {
+                    //         display: block;
+                    //     }
+                    // }
+                }
+
+                .itemActive {
+                    background-color: skyblue;
                 }
             }
         }
