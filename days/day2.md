@@ -45,3 +45,26 @@ nprogress.done() 进度条结束
 ### vuex状态管理库
 #### vuex是什么?
 vuex是官方的一个插件, 状态管理库, 集中式管理项目中组件共用的数据
+state: 仓库储存数据的地方
+mutations: 修改state的唯一手段
+actions: 处理action, 可以书写自己的逻辑, 也可以处理异步
+getters: 理解为计算属性, 用于简化仓库数据, 让组件获取仓库数据更加方便
+modules
+
+#### vuex基本使用
+
+#### vuex实现模块式开发
+如果项目过大, 组件过多, 接口也多, 数据也多, 可以让vuex实现模块式开发
+模拟state存储数据:
+    // 使用vuex仓库模块式开发存储数据
+    modules: {
+        home,
+        search
+    }
+
+#### state的使用
+    ...mapState({
+            // 右侧需要的是一个函数, 当使用这个计算属性的时候, 右侧函数会立即执行一次
+            // 注入一个参数state, 其实即为大仓库中的数据
+            categoryList: state => state.home.categoryList
+        })
