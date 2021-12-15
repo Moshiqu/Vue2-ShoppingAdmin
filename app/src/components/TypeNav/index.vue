@@ -11,11 +11,18 @@
                             v-for="(c1,index) in categoryList"
                             :key="c1.categoryId"
                             :class="{ itemActive: currentIndex == index }"
+                            @click="goSearch"
                         >
                             <h3 @mouseenter="changeCurrentIndex(index)">
-                                <a href>{{ c1.categoryName }}</a>
+                                <a
+                                    :data-categoryName="c1.categoryName"
+                                    :data-category1Id="c1.categoryId"
+                                >{{ c1.categoryName }}</a>
                             </h3>
-                            <div class="item-list clearfix" :style="{display:currentIndex == index?'block':'none'}">
+                            <div
+                                class="item-list clearfix"
+                                :style="{ display: currentIndex == index ? 'block' : 'none' }"
+                            >
                                 <div
                                     class="subitem"
                                     v-for="c2 in c1.categoryChild"
@@ -23,11 +30,17 @@
                                 >
                                     <dl class="fore">
                                         <dt>
-                                            <a href>{{ c2.categoryName }}</a>
+                                            <a
+                                                :data-categoryName="c2.categoryName"
+                                                :data-category2Id="c2.categoryId"
+                                            >{{ c2.categoryName }}</a>
                                         </dt>
                                         <dd>
                                             <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
-                                                <a href>{{ c3.categoryName }}</a>
+                                                <a
+                                                    :data-categoryName="c3.categoryName"
+                                                    :data-category3Id="c3.categoryId"
+                                                >{{ c3.categoryName }}</a>
                                             </em>
                                         </dd>
                                     </dl>
@@ -54,6 +67,7 @@
 <script>
 import { mapState } from "vuex"
 import throttle from 'lodash/throttle'
+import search from "@/store/search"
 
 export default {
     name: 'TypeNav',
@@ -78,11 +92,43 @@ export default {
         // changeCurrentIndex(index) {
         //     this.currentIndex = index
         // },
-        changeCurrentIndex: throttle(function(index){
+        changeCurrentIndex: throttle(function (index) {
             this.currentIndex = index
-        },50),
+        }, 50),
         initCurrentIndex() {
             this.currentIndex = -1
+        },
+        // 进行路由跳转的方法
+        goSearch(event) {
+            // 最好的解决方案: 编程式导航 + 事件委派
+            // 存在问题: 事件委派, 是把全部的子节点【h3,dt,dl,em]的事件委派给父节点
+            // 点击a标签的时候, 才会进行路由跳转如何【如何确定点击的是a标签】
+            // 存在另一个问题, 即使能确定点击的是a标签, 如何区分是一级,二级,三级分类的标签
+
+            // 第一个问题: 把子节点当中a标签加上自定义属性 data-categoryName, 其他标签没有这个自定义属性
+            let { categoryname, category1id, category2id,category3id } = event.target.dataset
+            if (categoryname) {
+                //点击的是a标签
+                // 整理路由跳转参数
+                let location = { name:"search"}
+                let query = {categoryName:categoryname}
+                if (category1id) {
+                    // 点击的是一级标签
+                    query.category1id = category1id
+                } else if (category2id) {
+                    //点击的是二级标签
+                    query.category2id = category2id
+                } else {
+                    query.category3id = category3id
+                    //点击的是三级标签
+                }
+                // 整理参数
+                location.query = query
+                // 路由跳转及传参
+                // 一般使用对象的形式进行参数传递
+                // this.$router.push({name:'search',params:{keyword:this.keyword},query:{k:this.keyword.toUpperCase()}})
+                this.$router.push(location)
+            }
         }
     },
 }
@@ -94,6 +140,7 @@ export default {
 
     a {
         text-decoration: none;
+        cursor: pointer;
     }
     .container {
         width: 1200px;
