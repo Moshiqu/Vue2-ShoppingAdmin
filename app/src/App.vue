@@ -13,7 +13,11 @@ import Footer from '@/components/Footer/index.vue'
 
 export default {
   name: 'App',
-  components:{
+  mounted() {
+    // 通知vuex发送请求, 存储到仓库中
+    this.$store.dispatch('getCategoryList')
+  },
+  components: {
     Header,
     Footer
   }
@@ -21,5 +25,4 @@ export default {
 </script>
 
 <style>
-
 </style>
