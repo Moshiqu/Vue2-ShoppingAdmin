@@ -47,4 +47,18 @@ npm install --save swiper@5
 #### watch: 在服务器返回数据后, 拿到数据之后
 
 #### $nextTick
-$nextTick: 在下次 DOM 更新循环结束(譬如 v-for 渲染完成之后, 已经有了 html 结构)之后执行延迟回调。在修改数据之后(譬如从服务器返回数据之后|watch, 已经有了数据)立即使用这个方法，获取更新后的 DOM,
+
+nextTick: 在下次 DOM 更新循环结束(譬如 v-for 渲染完成之后, 已经有了 html 结构)之后执行延迟回调。在修改数据之后(譬如从服务器返回数据之后|watch, 已经有了数据)立即使用这个方法，获取更新后的 DOM
+
+#### $ref
+
+vue 中 最好不要用 document.querySelector()去选择元素, 使用 $refs.(ref)
+
+### 组件传参
+
+1. props: 用于父子组件通信
+2. 自定义事件: @on @emit 可以实现子给父通信
+3. 全局事件总线: $bus 全能
+4. pubsub-js: vue 当中几乎不用 全能
+5. 插槽
+6. vuex

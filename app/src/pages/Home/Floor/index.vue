@@ -22,28 +22,20 @@
                     <div class="floor-1">
                         <div class="blockgary">
                             <ul class="jd-list">
-                                <li v-for="(item,index) in floor.keywords" :key="index">{{item}}</li>
+                                <li v-for="(item,index) in floor.keywords" :key="index">{{ item }}</li>
                             </ul>
                             <img :src="floor.imgUrl" />
                         </div>
                         <div class="floorBanner">
-                            <div class="swiper-container" id="floor1Swiper">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide" v-for="item in floor.carouselList" :key="item.id">
-                                        <img :src="item.imgUrl" />
-                                    </div>
-                                </div>
-                                <!-- 如果需要分页器 -->
-                                <div class="swiper-pagination"></div>
-
-                                <!-- 如果需要导航按钮 -->
-                                <div class="swiper-button-prev"></div>
-                                <div class="swiper-button-next"></div>
-                            </div>
+                            <Carousel :list="floor.carouselList" />
                         </div>
                         <div class="split">
                             <span class="floor-x-line"></span>
-                            <div class="floor-conver-pit" v-for="(item,index) in floor.recommendListFirst" :key="index">
+                            <div
+                                class="floor-conver-pit"
+                                v-for="(item,index) in floor.recommendListFirst"
+                                :key="index"
+                            >
                                 <img :src="item" />
                             </div>
                         </div>
@@ -52,7 +44,11 @@
                         </div>
                         <div class="split">
                             <span class="floor-x-line"></span>
-                            <div class="floor-conver-pit" v-for="(item,index) in floor.recommendListSecond" :key="index">
+                            <div
+                                class="floor-conver-pit"
+                                v-for="(item,index) in floor.recommendListSecond"
+                                :key="index"
+                            >
                                 <img :src="item" />
                             </div>
                         </div>
@@ -64,6 +60,8 @@
 </template>
 
 <script>
+import Swiper from "swiper"
+
 export default {
     props: {
         floor: Object
@@ -73,14 +71,11 @@ export default {
             navCurrentIndex: 0
         }
     },
-    computed: {
-    },
-    mounted() {
-    },
     methods: {
+        // 改变nav高亮
         changeNavCurrentIndex(index) {
             this.navCurrentIndex = index
-        }
+        },
     },
 }
 </script>

@@ -4,19 +4,7 @@
         <div class="sortList clearfix">
             <div class="center">
                 <!--banner轮播-->
-                <div class="swiper-container" id="mySwiper">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide" v-for="item in bannerList" :key="item.id">
-                            <img :src="item.imgUrl" />
-                        </div>
-                    </div>
-                    <!-- 如果需要分页器 -->
-                    <div class="swiper-pagination"></div>
-
-                    <!-- 如果需要导航按钮 -->
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-                </div>
+                <Carousel :list="bannerList" />
             </div>
             <div class="right">
                 <div class="news">
@@ -103,50 +91,19 @@
 
 <script>
 import { mapState } from "vuex"
-// 引入swiper
-import Swiper from 'swiper';
 
 export default {
     data() {
-        return {
-
-        }
+        return {};
     },
     computed: {
         ...mapState({
             bannerList: state => state.home.bannerList
         })
     },
-    watch: {
-        bannerList(newValue) {
-            if (newValue != []) {
-                this.$nextTick(()=> this.initSwiper())
-            }
-        }
-    },
     mounted() {
         // 通知vuex发送请求, 存储到仓库中
-        this.$store.dispatch('getBannerList')
-    },
-    methods: {
-        // 初始化swiper watch + nextTick
-        initSwiper() {
-            new Swiper(document.querySelector('.swiper-container'), {
-                loop: true, // 循环模式选项
-
-                // 如果需要分页器
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-
-                // 如果需要前进后退按钮
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
-            })
-        }
+        this.$store.dispatch("getBannerList");
     },
 }
 </script>
