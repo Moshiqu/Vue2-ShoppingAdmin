@@ -6,18 +6,9 @@
                 <!--banner轮播-->
                 <div class="swiper-container" id="mySwiper">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img src="./images/banner1.jpg" />
+                        <div class="swiper-slide" v-for="item in bannerList" :key="item.id">
+                            <img :src="item.imgUrl" />
                         </div>
-                        <!-- <div class="swiper-slide">
-                            <img src="./images/banner2.jpg" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="./images/banner3.jpg" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="./images/banner4.jpg" />
-                        </div> -->
                     </div>
                     <!-- 如果需要分页器 -->
                     <div class="swiper-pagination"></div>
@@ -111,8 +102,52 @@
 </template>
 
 <script>
-export default {
+import { mapState } from "vuex"
+// 引入swiper
+import Swiper from 'swiper';
 
+export default {
+    data() {
+        return {
+
+        }
+    },
+    computed: {
+        ...mapState({
+            bannerList: state => state.home.bannerList
+        })
+    },
+    watch: {
+        bannerList(newValue) {
+            if (newValue != []) {
+                this.$nextTick(()=> this.initSwiper())
+            }
+        }
+    },
+    mounted() {
+        // 通知vuex发送请求, 存储到仓库中
+        this.$store.dispatch('getBannerList')
+    },
+    methods: {
+        // 初始化swiper watch + nextTick
+        initSwiper() {
+            new Swiper(document.querySelector('.swiper-container'), {
+                loop: true, // 循环模式选项
+
+                // 如果需要分页器
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+
+                // 如果需要前进后退按钮
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            })
+        }
+    },
 }
 </script>
 
