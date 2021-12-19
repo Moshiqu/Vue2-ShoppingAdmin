@@ -4,7 +4,8 @@ import { reqBannerList, reqCategoryList, reqFllowList } from "@/api"
 const state = {
     categoryList: [],
     bannerList: [],
-    floorList: []
+    floorList: [],
+    searchKeyword: ''
 }
 
 // mutations: 修改state的唯一手段
@@ -17,11 +18,19 @@ const mutations = {
     },
     FLOORLIST(state, floorList) {
         state.floorList = floorList
-    }
+    },
+    KEYWORD(state, keyword) {
+        state.searchKeyword = keyword
+    },
+
 }
 
 // actions: 处理action, 可以书写自己的逻辑, 也可以处理异步
 const actions = {
+    // 修改home页面的input中的关键字
+    changeKeyWord({ commit }, keyword) {
+        commit('KEYWORD', keyword)
+    },
     // 通过API里的接口函数调用, 向服务器发送请求, 获取服务器数据
     async getCategoryList({ commit }) {
         const result = await reqCategoryList()
@@ -43,8 +52,8 @@ const actions = {
         const result = await reqFllowList()
         if (result.code == 200) {
             result.data.forEach(element => {
-                element.recommendListFirst = element.recommendList.slice(0,2)
-                element.recommendListSecond = element.recommendList.slice(2,4)
+                element.recommendListFirst = element.recommendList.slice(0, 2)
+                element.recommendListSecond = element.recommendList.slice(2, 4)
             });
             commit('FLOORLIST', result.data)
         }

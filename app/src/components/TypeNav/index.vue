@@ -79,7 +79,7 @@ export default {
     data() {
         return {
             currentIndex: -1, // sort当前的索引
-            isShowSort: true, // 是否展示sort
+            isShowSort: this.$route.path == '/home' ? true : false, // 是否展示sort
         }
     },
     computed: {
@@ -87,17 +87,10 @@ export default {
             // 右侧需要的是一个函数, 当使用这个计算属性的时候, 右侧函数会立即执行一次
             // 注入一个参数state, 其实即为大仓库中的数据
             categoryList: state => state.home.categoryList
-        })
+        }),
+
     },
     // 组件挂载完毕, 可以向服务器发送请求
-    mounted() {
-        // 如果不是'/home', 隐藏sort
-        if (this.$route.path != '/home') {
-            this.isShowSort = false
-        } else {
-            this.isShowSort = true
-        }
-    },
     methods: {
         // changeCurrentIndex(index) {
         //     this.currentIndex = index
@@ -129,12 +122,12 @@ export default {
                 let query = { categoryName: categoryname }
                 if (category1id) {
                     // 点击的是一级标签
-                    query.category1id = category1id
+                    query.category1Id = category1id
                 } else if (category2id) {
                     //点击的是二级标签
-                    query.category2id = category2id
+                    query.category2Id = category2id
                 } else {
-                    query.category3id = category3id
+                    query.category3Id = category3id
                     //点击的是三级标签
                 }
 
@@ -145,7 +138,9 @@ export default {
                     // 路由跳转及传参
                     // 一般使用对象的形式进行参数传递
                     // this.$router.push({name:'search',params:{keyword:this.keyword},query:{k:this.keyword.toUpperCase()}})
+                    this.isShowSort = false
                     this.$router.push(location)
+                    // 路由跳转后 关闭下拉栏
                 }
             }
         },

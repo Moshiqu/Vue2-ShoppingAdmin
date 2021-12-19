@@ -18,6 +18,10 @@ Vue.component(Carousel.name, Carousel)
 
 new Vue({
   render: h => h(App),
+  // 全局事件总线 $bus
+  beforeCreate() {
+    Vue.prototype.$bus = this
+  },
   // 注册路由
   // 注册路由信息: 当这里书写router的时候, 组件身上都拥有$route属性
   router,

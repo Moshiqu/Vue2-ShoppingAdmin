@@ -14,3 +14,6 @@ export const reqBannerList = () => mockRequests({ url: '/banner', method: 'get' 
 
 // 获取floor数据
 export const reqFllowList = () => mockRequests({ url: '/floor', method: 'get' })
+
+// 获取搜索页数据
+export const reqGetSearchInfo = (params) => requests({ url: "/list", method: 'post', data: params })

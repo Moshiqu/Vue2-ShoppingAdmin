@@ -31,12 +31,14 @@
                 </router-link>
             </h1>
             <div class="searchArea">
-                <form action="###" class="searchForm">
+                <form action="###" class="searchForm" @submit.prevent>
                     <input
                         type="text"
                         id="autocomplete"
                         class="input-error input-xxlarge"
-                        v-model="keyword"
+                        v-model.trim="keyword"
+                        @keyup.enter="goSearch"
+                        :placeholder="placeHolder"
                     />
                     <button class="sui-btn btn-xlarge btn-danger" type="button" @click="goSearch">搜索</button>
                 </form>
@@ -46,15 +48,33 @@
 </template>
 
 <script>
+import { mapState } from "vuex"
 export default {
     name: '',
     data() {
         return {
-            keyword: null,
+            keyword: '',
+            placeHolder: '手机'
         }
     },
+    watch: {
+        // vuex方式 清空header组件中的搜索关键字keyword
+        // searchKeyword(nv) {
+        //     this.keyword = nv
+        // }
+    },
+    computed: {
+        // vuex方式 清空header组件中的搜索关键字keyword
+        // ...mapState({
+        //     searchKeyword: state => state.home.searchKeyword
+        // }),
+    },
+    mounted() {
+        // 通过全局事件总线清空keyword
+        this.$bus.$on("clear", () => this.keyword = '')
+    },
     methods: {
-        // 搜索按钮的回调函数: 需要向search路由进行跳转
+        // 搜索的回调函数: 需要向search路由进行跳转
         goSearch() {
             // params传参
             // this.$router.push(`/search/${this.keyword}`)
@@ -67,18 +87,23 @@ export default {
             //     params: { keyword: this.keyword || undefined },
             //     // query: { k: this.keyword }
             // })
-            let location = {
-                name: 'search',
-                params: { keyword: this.keyword || undefined },
-                query: this.$route.query
+            if (!this.keyword) {
+                this.keyword = this.placeHolder
+                this.goSearch()
+            } else {
+                let location = {
+                    name: 'search',
+                    params: { keyword: this.keyword || undefined },
+                    query: this.$route.query
+                }
+                if (this.$route.query) {
+                    location.query = this.$route.query
+                }
+                // vuex方式 清空header组件中的搜索关键字keyword
+                // this.$store.dispatch('changeKeyWord', this.keyword)
+                this.$router.push(location)
             }
-            if (this.$route.query) {
-                location.query = this.$route.query
-            }
-
-            this.$router.push(location)
-
-        }
+        },
     },
 }
 </script>
