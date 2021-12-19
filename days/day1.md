@@ -28,11 +28,14 @@ README.md: 说明性文件
 #### 运行项目时, 浏览器自动打开
 
 -- package.json
-"scripts": {
-"serve": "vue-cli-service serve --open",
-"build": "vue-cli-service build",
-"lint": "vue-cli-service lint"
-},
+
+```JavaScript
+    "scripts": {
+        "serve": "vue-cli-service serve --open",
+        "build": "vue-cli-service build",
+        "lint": "vue-cli-service lint"
+    },
+```
 
 #### eslint 校验功能关闭
 
@@ -42,6 +45,7 @@ lintOnSave:false
 
 #### src 文件夹简写方法,配置别名
 
+```JavaScript
     {
         "compilerOptions": {
             "baseUrl": "./",
@@ -56,6 +60,7 @@ lintOnSave:false
             "dist"
         ]
     }
+```
 
 ### 项目路由的分析
 
