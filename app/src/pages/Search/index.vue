@@ -113,6 +113,13 @@
             </ul>
           </div>
           <!-- 分页器 -->
+          <Pagination
+            :pageNo="searchParams.pageNo"
+            :pageSize="searchParams.pageSize"
+            :total="total"
+            :continues="5"
+            @getPageNo="getPageNo"
+          />
         </div>
       </div>
     </div>
@@ -120,7 +127,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import SearchSelector from './SearchSelector/SearchSelector'
 
 export default {
@@ -146,6 +153,9 @@ export default {
     this.getData()
   },
   computed: {
+    ...mapState({
+      total: state => state.search.searchList.total,
+    }),
     ...mapGetters(['goodsList', 'trademarkList', 'attrsList']),
     // 如果有1, 为true, 没有1, false
     isOrderOne() {
@@ -250,6 +260,13 @@ export default {
       this.searchParams.order = newOrder
       this.getData()
     },
+    //分页器点击
+    getPageNo(pageNo) {
+      if (pageNo == this.searchParams.pageNo) return
+      console.log(pageNo);
+      this.searchParams.pageNo = pageNo
+      this.getData()
+    }
   },
 }
 </script>
