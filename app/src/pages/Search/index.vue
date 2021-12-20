@@ -21,6 +21,13 @@
               {{ searchParams.trademark.split(":")[1] }}
               <i @click="removeTrademark">×</i>
             </li>
+            <!-- 属性的面包屑 -->
+            <template v-if="searchParams.props">
+              <li class="with-x" v-for="(item,index) in searchParams.props" :key="index">
+                {{ item.split(':')[1] }}
+                <i @click="removeProp(item)">×</i>
+              </li>
+            </template>
             <!-- 关键词的面包屑 -->
             <li class="with-x" v-if="searchParams.keyword">
               {{ searchParams.keyword }}
@@ -34,6 +41,7 @@
           :trademarkList="trademarkList"
           :attrsList="attrsList"
           @trademarkInfo="trademarkInfo"
+          @propsInfo="propsInfo"
         />
 
         <!--details-->
@@ -41,23 +49,25 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="[isOrderOne ? 'active' : '']" @click="changeSort(1)">
+                  <a>
+                    综合
+                    <span
+                      v-show="isOrderOne"
+                      class="iconfont"
+                      :class="{ 'icon-up': isOrderAsc, 'icon-down': isOrderDesc }"
+                    ></span>
+                  </a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="[isOrderTwo ? 'active' : '']" @click="changeSort(2)">
+                  <a>
+                    价格
+                    <span
+                      v-show="isOrderTwo"
+                      class="iconfont"
+                      :class="{ 'icon-up': isOrderAsc, 'icon-down': isOrderDesc }"
+                    ></span>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -102,39 +112,7 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted">
-                  <span>...</span>
-                </li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div>
-                <span>共10页&nbsp;</span>
-              </div>
-            </div>
-          </div>
+          <!-- 分页器 -->
         </div>
       </div>
     </div>
@@ -155,11 +133,11 @@ export default {
         category3Id: "",
         categoryName: "",
         keyword: "",
-        order: "",
+        order: "1:desc",
         pageNo: 1,
         pageSize: 10,
         props: [],
-        trademark: []
+        trademark: ''
       },
     }
   },
@@ -168,7 +146,20 @@ export default {
     this.getData()
   },
   computed: {
-    ...mapGetters(['goodsList', 'trademarkList', 'attrsList'])
+    ...mapGetters(['goodsList', 'trademarkList', 'attrsList']),
+    // 如果有1, 为true, 没有1, false
+    isOrderOne() {
+      return this.searchParams.order.indexOf('1') != -1
+    },
+    isOrderTwo() {
+      return this.searchParams.order.indexOf('2') != -1
+    },
+    isOrderAsc() {
+      return this.searchParams.order.indexOf('asc') != -1
+    },
+    isOrderDesc() {
+      return this.searchParams.order.indexOf('desc') != -1
+    },
   },
   beforeDestroy() {
     this.$store.dispatch('changeKeyWord', '')
@@ -222,14 +213,43 @@ export default {
     },
     // 删除品牌标签
     removeTrademark() {
-      this.searchParams.trademark = []
+      this.searchParams.trademark = ''
+      this.getData()
+    },
+    // 删除prop标签
+    removeProp(prop) {
+      this.searchParams.props.splice(this.searchParams.props.indexOf(prop))
       this.getData()
     },
     // 自定义事件回调
     trademarkInfo(trademark) {
       this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`
       this.getData()
-    }
+    },
+    // 自定义事件回调
+    propsInfo(attr, prop) {
+      // 禁止点击相同的prop
+      // 数组去重
+      const { attrId, attrName } = attr
+      if (this.searchParams.props.indexOf(`${attrId}:${prop}:${attrName}`) == -1) {
+        this.searchParams.props.push(`${attrId}:${prop}:${attrName}`)
+        this.getData()
+      }
+    },
+    // 排序的点击
+    changeSort(flag) {
+      const originOrder = this.searchParams.order
+      const originFlag = originOrder.split(':')[0]
+      const originSort = originOrder.split(':')[1]
+      let newOrder = ''
+      if (flag == originFlag) {
+        newOrder = `${originFlag}:${originSort == 'desc' ? 'asc' : 'desc'}`
+      } else {
+        newOrder = `${flag}:${'desc'}`
+      }
+      this.searchParams.order = newOrder
+      this.getData()
+    },
   },
 }
 </script>

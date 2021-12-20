@@ -77,3 +77,50 @@ state 就是当前仓库的 state
   </button>
 </form>
 ```
+
+### 全局事件总线
+
+#### 入口函数, 挂载$bus
+
+```JavaScript
+  beforeCreate() {
+    Vue.prototype.$bus = this
+  },
+```
+
+#### 触发方法
+
+```JavaScript
+  // 全局事件总线方式 清空header组件中的搜索关键字keyword
+  this.$bus.$emit('clear')
+```
+
+#### 监听方法
+
+```JavaScript
+  mounted() {
+    // 通过全局事件总线清空keyword
+    this.$bus.$on("clear", () => this.keyword = '')
+  },
+```
+
+## 12.20
+
+### 数组去重
+
+```JavaScript
+  attrs.indexOf(attr) == -1 // 找不到的话 为-1, 找得到的话 为attr在attrs中的索引值
+  if(attrs.indexOf(attr) == -1){
+    // attrs中不包含attr元素, 可以进行push
+    attrs.push(attr)
+  }
+```
+
+### 数组查找元素
+
+```JavaScript
+  // 如果attrs数组包含了attr, 删除这个attr
+  attrs.splice(attrs.indexOf(attr))
+```
+
+### 前端难点: 轮播图, 分页器, 日历

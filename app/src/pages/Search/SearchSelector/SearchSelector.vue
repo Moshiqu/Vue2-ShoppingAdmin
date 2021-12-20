@@ -9,9 +9,6 @@
             :key="item.tmId"
             @click="trademarkHandler(item)"
           >{{ item.tmName }}</li>
-          <!-- <li>
-            <img src="./images/phone06.png" />
-          </li>-->
         </ul>
       </div>
       <div class="ext">
@@ -24,7 +21,7 @@
       <div class="fl value">
         <ul class="type-list">
           <li v-for="(item2,index) in item.attrValueList" :key="index">
-            <a>{{ item2 }}</a>
+            <a @click="propsHandler(item, item2)">{{ item2 }}</a>
           </li>
         </ul>
       </div>
@@ -43,6 +40,9 @@ export default {
   methods: {
     trademarkHandler(item) {
       this.$emit('trademarkInfo', item)
+    },
+    propsHandler(attr, prop) {
+      this.$emit('propsInfo', attr, prop)
     }
   },
 }
