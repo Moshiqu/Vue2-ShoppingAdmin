@@ -9,6 +9,7 @@
                 v-if="page > startNumAndEndNum.start - 1"
                 :key="index"
                 @click="$emit('getPageNo', page)"
+                :class="{ active: page == pageNo }"
             >{{ page }}</button>
         </template>
 

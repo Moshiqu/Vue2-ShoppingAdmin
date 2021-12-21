@@ -77,9 +77,9 @@
               <li class="yui3-u-1-5" v-for="item in goodsList" :key="item.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank">
+                    <router-link :to="`/detail/${item.id}`">
                       <img :src="item.defaultImg" style="width: 100%; height:100%" />
-                    </a>
+                    </router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -266,7 +266,7 @@ export default {
       console.log(pageNo);
       this.searchParams.pageNo = pageNo
       this.getData()
-    }
+    },
   },
 }
 </script>

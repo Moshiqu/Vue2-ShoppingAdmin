@@ -17,3 +17,6 @@ export const reqFllowList = () => mockRequests({ url: '/floor', method: 'get' })
 
 // 获取搜索页数据
 export const reqGetSearchInfo = (params) => requests({ url: "/list", method: 'post', data: params })
+
+// 获取商品详情
+export const reqGoodInfo = (params) => requests({ url: `/item/${params}`, method: 'get' })
