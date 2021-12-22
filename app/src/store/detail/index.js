@@ -1,4 +1,4 @@
-import { reqGoodInfo } from "@/api";
+import { reqGoodInfo, reqAddOrUpdateShopCart } from "@/api";
 
 const state = {
     goodInfo: {}
@@ -14,6 +14,14 @@ const actions = {
         if (result.code == 200) {
             commit('GETGOODINFO', result.data)
         }
+    },
+    async addOrUpdateShopCart({ commit }, { skuId, skuNum }) {
+        const result = await reqAddOrUpdateShopCart(skuId, skuNum)
+        if (result.code == 200) {
+            return "ok"
+        } else {
+            return Promise.reject(new Error('添加商品出错'))
+        }
     }
 }
 const getters = {
@@ -24,7 +32,6 @@ const getters = {
         return state.goodInfo.skuInfo || {}
     },
     spuSaleAttrList(state) {
-        console.log(state.goodInfo.spuSaleAttrList);
         if (state.goodInfo.spuSaleAttrList) {
             state.goodInfo.spuSaleAttrList.forEach(item => {
                 item.spuSaleAttrValueList.forEach(element => {

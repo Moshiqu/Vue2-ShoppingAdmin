@@ -77,12 +77,12 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input autocomplete="off" class="itxt" v-model="count" />
+                <a href="javascript:" class="plus" @click="addCount">+</a>
+                <a href="javascript:" class="mins" @click="reduceCount">-</a>
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a href="javascript:" @click="addToCart">加入购物车</a>
               </div>
             </div>
           </div>
@@ -333,13 +333,27 @@ export default {
   },
   data() {
     return {
-      curentAttr: 1
+      count: 1, // 产品个数
     }
   },
   computed: {
     ...mapGetters(['categoryView', 'skuInfo', 'spuSaleAttrList']),
     skuImageList() {
       return this.skuInfo.skuImageList
+    }
+  },
+  watch: {
+    count(nv, ov) {
+      // 正则判断
+      const pattern = /^\d+$/;
+      const flag = pattern.test(nv)
+      if (flag) {
+        // 只包含数字
+        this.count = nv
+      } else {
+        // 含有非数字
+        this.count = ov
+      }
     }
   },
   mounted() {
@@ -356,6 +370,31 @@ export default {
         element.isChecked = 0
       });
       saleAttr.isChecked = 1
+    },
+    // 产品数量+
+    addCount() {
+      this.count++
+    },
+    // 产品-
+    reduceCount() {
+      if (this.count == 1) return
+      this.count--
+    },
+    // 添加到购物车
+    async addToCart() {
+      const sendData = {
+        skuId: this.skuInfo.id,
+        skuNum: this.count
+      }
+      try {
+        // 因为this.$store.dispatch('addOrUpdateShopCart', sendData) 返回的是一个promise
+        // ????????? 这里为什么要用await
+        console.log('这里为什么要用await');
+        await this.$store.dispatch('addOrUpdateShopCart', sendData)
+      } catch (error) {
+        alert(error.message)
+      }
+      // result.reject()
     }
   },
 }

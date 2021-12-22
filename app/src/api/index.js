@@ -19,4 +19,7 @@ export const reqFllowList = () => mockRequests({ url: '/floor', method: 'get' })
 export const reqGetSearchInfo = (params) => requests({ url: "/list", method: 'post', data: params })
 
 // 获取商品详情
-export const reqGoodInfo = (params) => requests({ url: `/item/${params}`, method: 'get' })
+export const reqGoodInfo = (skuId) => requests({ url: `/item/${skuId}`, method: 'get' })
+
+// 添加产品到购物车(或更新购物车中产品的数量)
+export const reqAddOrUpdateShopCart = (skuId, skuNum) => requests({ url: `/cart/addToCart/${skuId}/${skuNum}`, method: 'post' })

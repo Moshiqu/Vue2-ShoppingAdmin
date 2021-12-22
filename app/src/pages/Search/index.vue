@@ -263,7 +263,6 @@ export default {
     //分页器点击
     getPageNo(pageNo) {
       if (pageNo == this.searchParams.pageNo) return
-      console.log(pageNo);
       this.searchParams.pageNo = pageNo
       this.getData()
     },

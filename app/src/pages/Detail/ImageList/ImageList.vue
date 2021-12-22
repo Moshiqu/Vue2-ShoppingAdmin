@@ -1,8 +1,8 @@
 <template>
-  <div class="swiper-container">
+  <div class="swiper-container" ref="myswiper">
     <div class="swiper-wrapper">
-      <div class="swiper-slide" v-for="item in skuImageList" :key="item.id">
-        <img :src="item.imgUrl" />
+      <div class="swiper-slide" v-for="(item,index) in skuImageList" :key="item.id">
+        <img :src="item.imgUrl" :class="{ active: currentIndex == index }" @click="imgClick(index)" />
       </div>
     </div>
     <div class="swiper-button-next"></div>
@@ -19,7 +19,33 @@ export default {
       type: Array,
       default: () => []
     }
-  }
+  },
+  data() {
+    return {
+      currentIndex: 0
+    }
+  },
+  watch: {
+    skuImageList(nv) {
+      this.$nextTick(() => {
+        new Swiper(this.$refs.myswiper, {
+          // 如果需要前进后退按钮
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+          slidesPerView: 3,
+        })
+      })
+    }
+  },
+  methods: {
+    imgClick(index) {
+      this.currentIndex = index
+      //通知兄弟组件Zoom 修改显示图片index
+      this.$bus.$emit('changeImg', index)
+    },
+  },
 }
 </script>
 
@@ -44,11 +70,6 @@ export default {
       display: block;
 
       &.active {
-        border: 2px solid #f60;
-        padding: 1px;
-      }
-
-      &:hover {
         border: 2px solid #f60;
         padding: 1px;
       }
