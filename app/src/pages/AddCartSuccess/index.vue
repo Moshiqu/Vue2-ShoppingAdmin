@@ -12,14 +12,13 @@
           <div class="right-info">
             <p class="title">{{ skuInfo.skuName }}</p>
             <p class="attr">
-              <span v-for="item in spuSaleAttrList" :key="item.id">
+              <span v-for="item in spuSaleAttrList" :key="item.id" style="margin-right:15px">
                 {{ item.saleAttrName }}：
                 <span
                   v-for="item2 in item.spuSaleAttrValueList"
                   :key="item2.id"
                 >
                   <template v-if="item2.isChecked">{{ item2.saleAttrValueName }}</template>
-                  &nbsp;
                 </span>
               </span>
               <span>数量：{{ skuNum }}</span>
