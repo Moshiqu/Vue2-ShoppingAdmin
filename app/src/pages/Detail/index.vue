@@ -65,13 +65,13 @@
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
-              <dl v-for="saleAttr in spuSaleAttrList" :key="saleAttr.id">
+              <dl v-for="(saleAttr,index) in spuSaleAttrList" :key="saleAttr.id">
                 <dt class="title">{{ saleAttr.saleAttrName }}</dt>
                 <dd
                   :class="{ active: attr.isChecked == 1 }"
                   v-for="attr in saleAttr.spuSaleAttrValueList"
                   :key="attr.id"
-                  @click="attrHandler(attr, saleAttr.spuSaleAttrValueList)"
+                  @click="attrHandler(attr, saleAttr.spuSaleAttrValueList, index)"
                 >{{ attr.saleAttrValueName }}</dd>
               </dl>
             </div>
@@ -364,12 +364,13 @@ export default {
       this.$store.dispatch('getGoodInfo', this.$route.params.skuid)
     },
     // 属性的点击
-    attrHandler(saleAttr, arr) {
+    attrHandler(saleAttr, arr, index) {
       // saleAttr 当前点击的选项的对象, arr 当前所属类别的包含saleAttr的对象
       arr.forEach(element => {
         element.isChecked = 0
       });
       saleAttr.isChecked = 1
+      this.spuSaleAttrList[index].isChecked = true
     },
     // 产品数量+
     addCount() {
@@ -382,19 +383,39 @@ export default {
     },
     // 添加到购物车
     async addToCart() {
+      // 如果有一个或多个产品属性没有选择, 则提示
+      let flag = true
+      this.spuSaleAttrList.some(item => {
+        if (!!!item.isChecked) {
+          flag = false
+          alert(`请选择${item.saleAttrName}`)
+          return true
+        }
+      })
+      if (!flag) return
+
       const sendData = {
         skuId: this.skuInfo.id,
         skuNum: this.count
       }
       try {
-        // 因为this.$store.dispatch('addOrUpdateShopCart', sendData) 返回的是一个promise
-        // ????????? 这里为什么要用await
-        console.log('这里为什么要用await');
+        // 因为this.$store.dispatch('addOrUpdateShopCart', sendData) 返回的是一个promise 
+        // 需要用await等待promise执行成功, 用tryCatch判断promise执行失败
         await this.$store.dispatch('addOrUpdateShopCart', sendData)
+        // 添加到购物车成功后, 会话存储购买的数据
+        const sessionData = {
+          skuInfo: this.skuInfo,
+          spuSaleAttrList: this.spuSaleAttrList
+        }
+        sessionStorage.setItem('sessionData', JSON.stringify(sessionData))
+        // 添加到购物车成功后, 路由跳转
+        this.$router.push({
+          name: 'addcartsuccess',
+          query: { skuNum: this.count }
+        })
       } catch (error) {
         alert(error.message)
       }
-      // result.reject()
     }
   },
 }

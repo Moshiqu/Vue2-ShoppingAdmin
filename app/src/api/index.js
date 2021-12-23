@@ -23,3 +23,6 @@ export const reqGoodInfo = (skuId) => requests({ url: `/item/${skuId}`, method: 
 
 // 添加产品到购物车(或更新购物车中产品的数量)
 export const reqAddOrUpdateShopCart = (skuId, skuNum) => requests({ url: `/cart/addToCart/${skuId}/${skuNum}`, method: 'post' })
+
+// 获取购物车列表
+export const reqCartList = () => requests({ url: '/cart/cartList', method: 'get' })
