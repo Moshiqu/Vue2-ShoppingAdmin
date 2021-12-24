@@ -6,7 +6,7 @@
         <TodayRecommend />
         <Rank />
         <Like />
-        <Floor v-for="item in floorList" :key="item.id" :floor="item"/>
+        <Floor v-for="item in floorList" :key="item.id" :floor="item" />
         <Brand />
     </div>
 </template>
@@ -35,8 +35,14 @@ export default {
             floorList: state => state.home.floorList
         })
     },
+    mounted() {
+        this.$store.dispatch('getFloorList')
+        this.getUserInfo()
+    },
     methods: {
-
+        async getUserInfo() {
+            await this.$store.dispatch('getUserInfo')
+        }
     },
 }
 </script>

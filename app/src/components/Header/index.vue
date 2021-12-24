@@ -5,7 +5,11 @@
             <div class="container">
                 <div class="loginList">
                     <p>尚品汇欢迎您！</p>
-                    <p>
+                    <p v-if="userInfo.id">
+                        <a>{{ userInfo.name }}</a>
+                        <a class="register" @click="logout">退出</a>
+                    </p>
+                    <p v-else>
                         <span>请</span>
                         <router-link to="/login">登录</router-link>
                         <router-link to="/register" class="register">免费注册</router-link>
@@ -57,17 +61,20 @@ export default {
             placeHolder: '手机'
         }
     },
-    watch: {
-        // vuex方式 清空header组件中的搜索关键字keyword
-        // searchKeyword(nv) {
-        //     this.keyword = nv
-        // }
-    },
     computed: {
         // vuex方式 清空header组件中的搜索关键字keyword
         // ...mapState({
         //     searchKeyword: state => state.home.searchKeyword
         // }),
+        ...mapState({
+            userInfo: state => state.user.userInfo
+        })
+    },
+    watch: {
+        // vuex方式 清空header组件中的搜索关键字keyword
+        // searchKeyword(nv) {
+        //     this.keyword = nv
+        // }
     },
     mounted() {
         // 通过全局事件总线清空keyword
@@ -104,6 +111,14 @@ export default {
                 this.$router.push(location)
             }
         },
+        // 退出登录
+        logout() {
+            this.$store.dispatch('logout').then((result) => {
+                alert('退出登录成功')
+            }).catch((err) => {
+                console.log(err);
+            });
+        }
     },
 }
 </script>

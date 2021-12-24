@@ -14,23 +14,23 @@
           </ul>
 
           <div class="content">
-            <form action="##">
+            <form action="##" @submit.prevent>
               <div class="input-text clearFix">
                 <span></span>
-                <input type="text" placeholder="邮箱/用户名/手机号" />
+                <input type="text" placeholder="邮箱/用户名/手机号" v-model="phoneNum" />
               </div>
               <div class="input-text clearFix">
                 <span class="pwd"></span>
-                <input type="text" placeholder="请输入密码" />
+                <input type="text" placeholder="请输入密码" v-model="password" />
               </div>
               <div class="setting clearFix">
                 <label class="checkbox inline">
-                  <input name="m1" type="checkbox" value="2" checked />
+                  <input name="m1" type="checkbox" value="2" v-model="isAuto" />
                   自动登录
                 </label>
                 <span class="forget">忘记密码？</span>
               </div>
-              <button class="btn">登&nbsp;&nbsp;录</button>
+              <button class="btn" @click="login">登&nbsp;&nbsp;录</button>
             </form>
 
             <div class="call clearFix">
@@ -75,6 +75,26 @@
 <script>
 export default {
   name: 'Login',
+  data() {
+    return {
+      phoneNum: '',
+      password: '',
+      isAuto: false, // 是否自动登录
+    }
+  },
+  methods: {
+    login() {
+      if (this.phoneNum && this.password) {
+        console.log(this.isAuto);
+        this.$store.dispatch('loginByPassword', { phone: this.phoneNum, password: this.password, isAuto: this.isAuto })
+          .then((result) => {
+            this.$router.push('/home')
+          }).catch((err) => {
+            alert(err.message)
+          });
+      }
+    }
+  },
 }
 </script>
 

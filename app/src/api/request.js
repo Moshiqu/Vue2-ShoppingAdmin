@@ -22,6 +22,12 @@ requests.interceptors.request.use((config) => {
     if (store.state.cart.uuid_token) {
         config.headers.userTempId = store.state.cart.uuid_token
     }
+    if (localStorage.getItem('USER_TOKEN')) {
+        config.headers.token = localStorage.getItem('USER_TOKEN')
+    }
+    if (sessionStorage.getItem('USER_TOKEN')) {
+        config.headers.token = sessionStorage.getItem('USER_TOKEN')
+    }
     // 进度条开始动
     nprogress.start()
     return config

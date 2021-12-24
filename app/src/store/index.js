@@ -4,7 +4,7 @@ import home from './home'
 import search from './search'
 import detail from './detail'
 import cart from './cart'
-import register from './user'
+import user from './user'
 
 // 需要插件使用一次
 Vue.use(Vuex)
@@ -17,6 +17,6 @@ export default new Vuex.Store({
         search,
         detail,
         cart,
-        register
+        user
     }
 })

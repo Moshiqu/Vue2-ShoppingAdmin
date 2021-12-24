@@ -16,7 +16,6 @@ export default {
   mounted() {
     // 通知vuex发送请求, 存储到仓库中
     this.$store.dispatch('getCategoryList')
-    this.$store.dispatch('getFloorList')
   },
   components: {
     Header,
