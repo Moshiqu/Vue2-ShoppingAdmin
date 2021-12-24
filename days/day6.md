@@ -66,3 +66,13 @@
 
 Promise.all([p1,p2,p3])
 当所有的 promise(p1,p2,p3)返回的结果都为成功, 那么 Promise.all([p1,p2,p3])的结果就是成功, 如果有一个或多个 promise 的结果为失败, 那么 Promise.all([p1,p2,p3])的结果就是失败
+
+## 23.24
+
+### css 中使用外部图片
+
+~是 src 别名
+
+```CSS
+    background-image: url(~@/assets/images/icons.png);
+```

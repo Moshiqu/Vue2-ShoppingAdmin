@@ -29,3 +29,12 @@ export const reqCartList = () => requests({ url: '/cart/cartList', method: 'get'
 
 // 删除购物车商品
 export const reqDeleteGood = skuId => requests({ url: `/cart/deleteCart/${skuId}`, method: 'delete' })
+
+// 发送验证码
+export const reqGetCode = phoneNum => requests({ url: `/user/passport/sendCode/${phoneNum}`, method: 'get' })
+
+// 用户注册
+export const reqRegister = params => requests({ url: '/user/passport/register', method: "post", data: params })
+
+// 用户登录
+export const reqLogin = (params) => requests({ url: '/user/passport/login', method: 'post', data: params })
