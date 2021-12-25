@@ -8,6 +8,7 @@ import Search from '@/pages/Search'
 import Detail from '@/pages/Detail'
 import AddCartSuccess from "@/pages/AddCartSuccess"
 import ShopCart from '@/pages/ShopCart'
+import Trade from '@/pages/Trade'
 
 const routes = [
     // 重定型, 在项目跑起来的时候, 访问的'/', 立马定向到首页
@@ -56,6 +57,11 @@ const routes = [
         component: ShopCart,
         meta: { show: true }
     },
+    {
+        path: '/trade',
+        name: 'trade',
+        component: Trade
+    }
 ]
 
 export default routes

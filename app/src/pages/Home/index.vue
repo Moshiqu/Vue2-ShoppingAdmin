@@ -37,12 +37,8 @@ export default {
     },
     mounted() {
         this.$store.dispatch('getFloorList')
-        this.getUserInfo()
     },
     methods: {
-        async getUserInfo() {
-            await this.$store.dispatch('getUserInfo')
-        }
     },
 }
 </script>

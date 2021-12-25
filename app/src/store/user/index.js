@@ -5,7 +5,7 @@ const state = {
     userInfo: {}
 }
 const mutations = {
-    GETUSERINFO(state, token) {
+    GETUSERTOKEN(state, token) {
         state.user_token = token
     },
     USERINFO(state, userInfo) {
@@ -15,7 +15,8 @@ const mutations = {
         state.userInfo = {}
         state.user_token = ''
         localStorage.removeItem('USER_TOKEN')
-    }
+        sessionStorage.removeItem('USER_TOKEN')
+    },
 }
 const actions = {
     async getCode({ commit }, phoneNum) {
@@ -46,7 +47,7 @@ const actions = {
             } else {
                 sessionStorage.setItem('USER_TOKEN', result.data.token)
             }
-            commit('GETUSERINFO', result.data.token)
+            await commit('GETUSERTOKEN', result.data.token)
             return Promise.resolve(result)
         } else {
             return Promise.reject(result)
@@ -57,8 +58,13 @@ const actions = {
         const result = await reqGetUserInfo()
         if (result.code == 200) {
             commit('USERINFO', result.data)
+            const userToken = localStorage.getItem('USER_TOKEN') || sessionStorage.getItem('USER_TOKEN')
+            if (userToken) {
+                commit('GETUSERTOKEN', userToken)
+            }
             return 'ok'
         } else {
+            commit('LOGOUT')
             return 'fail'
         }
     },
@@ -71,7 +77,7 @@ const actions = {
         } else {
             return Promise.reject(result.message)
         }
-    }
+    },
 }
 const getters = {}
 

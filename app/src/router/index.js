@@ -2,6 +2,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
+import store from "@/store";
+
 // 使用插件
 Vue.use(VueRouter);
 
@@ -29,11 +31,51 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
 }
 
 // 配置路由
-export default new VueRouter({
+let router = new VueRouter({
     routes,
     // 滚动行为
     scrollBehavior(to, from, savedPosition) {
         return { y: 0 }
     }
 })
+
+// 全局守卫： 前置守卫， （在路由跳转之前进行判断）
+router.beforeEach((to, from, next) => {
+    const userToken = store.state.user.user_token
+    const userName = store.state.user.userInfo.name
+    // next:放行函数 next()放行 next(path)放行到指定的路由 next(false)
+    if (userToken) {
+        if (to.path == '/login' || to.path == '/register') {
+            // 登录情况下 去login, register
+            next('/home')
+        } else {
+            // 登录情况下 去的不是login, register
+            if (userName) {
+                // userInfo有数据
+                next()
+            } else {
+                // userInfo没有数据
+                store.dispatch('getUserInfo').then(res => {
+                    next()
+                }).catch(err => {
+                    this.$router.push('/login')
+                })
+            }
+        }
+    } else {
+        // 未登录
+        const token = localStorage.getItem("USER_TOKEN") || sessionStorage.getItem('USER_TOKEN')
+        if (token) {
+            store.dispatch('getUserInfo').then((result) => {
+                next()
+            }).catch((err) => {
+                next('/login')
+            });
+        } else {
+            next()
+        }
+    }
+})
+
+export default router
 

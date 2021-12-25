@@ -44,3 +44,6 @@ export const reqGetUserInfo = () => requests({ url: '/user/passport/auth/getUser
 
 // 退出登录
 export const reqLoginout = () => requests({ url: '/user/passport/logout', method: 'get' })
+
+// 获取订单交易页信息
+export const reqGetTrade = () => requests({ url: "/order/auth/trade", method: 'get' })

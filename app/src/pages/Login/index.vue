@@ -85,7 +85,6 @@ export default {
   methods: {
     login() {
       if (this.phoneNum && this.password) {
-        console.log(this.isAuto);
         this.$store.dispatch('loginByPassword', { phone: this.phoneNum, password: this.password, isAuto: this.isAuto })
           .then((result) => {
             this.$router.push('/home')
