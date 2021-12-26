@@ -47,3 +47,34 @@ export const reqLoginout = () => requests({ url: '/user/passport/logout', method
 
 // 获取订单交易页信息
 export const reqGetTrade = () => requests({ url: "/order/auth/trade", method: 'get' })
+
+// 提交订单
+export const reqSubmitOrder = async (tradeNo, params) => {
+    const result = await requests({ url: `/order/auth/submitOrder?tradeNo=${tradeNo}`, method: 'post', data: params })
+    if (result.code == 200) {
+        return Promise.resolve(result.data)
+    } else {
+        return Promise.reject(result.message)
+    }
+}
+
+// 获取订单支付信息 
+export const reqGetPay = async orderId => {
+    const result = await requests({ url: `/payment/weixin/createNative/${orderId}`, method: "get" })
+    if (result.code) {
+        return result.data
+    } else {
+        return result.message
+    }
+}
+
+// 查询支付订单状态
+
+export const reqGetPayStatus = async orderId => {
+    const result = await requests({ url: `/payment/weixin/queryPayStatus/${orderId}`, method: "get" })
+    if (result.code == 200) {
+        return Promise.resolve(result.data)
+    } else {
+        return Promise.reject(result.message)
+    }
+}

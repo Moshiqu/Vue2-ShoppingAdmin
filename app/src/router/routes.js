@@ -1,6 +1,6 @@
 // 路由配置信息
 
-// 引入路由组件
+// 引入一级路由组件
 import Home from '@/pages/Home'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
@@ -9,6 +9,13 @@ import Detail from '@/pages/Detail'
 import AddCartSuccess from "@/pages/AddCartSuccess"
 import ShopCart from '@/pages/ShopCart'
 import Trade from '@/pages/Trade'
+import Pay from "@/pages/Pay"
+import PaySuccess from '@/pages/PaySuccess'
+import Center from "@/pages/Center"
+
+// 引入二级路由组件
+import MyOrder from "@/pages/Center/myOrder"
+import GroupOrder from "@/pages/Center/groupOrder"
 
 const routes = [
     // 重定型, 在项目跑起来的时候, 访问的'/', 立马定向到首页
@@ -61,6 +68,31 @@ const routes = [
         path: '/trade',
         name: 'trade',
         component: Trade
+    },
+    {
+        path: '/pay',
+        name: 'pay',
+        component: Pay
+    }, {
+        path: '/paysuccess',
+        name: "paysuccess",
+        component: PaySuccess
+    }, {
+        path: '/center',
+        name: 'center',
+        component: Center,
+        children: [
+            {
+                path: '/center',
+                redirect: '/center/myorder'
+            }, {
+                path: 'myorder',
+                component: MyOrder
+            }, {
+                path: 'grouporder',
+                component: GroupOrder
+            }
+        ]
     }
 ]
 

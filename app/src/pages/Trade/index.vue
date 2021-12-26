@@ -3,8 +3,12 @@
     <h3 class="title">填写并核对订单信息</h3>
     <div class="content">
       <h5 class="receive">收件人信息</h5>
-      <div class="address clearFix" v-for="address in  userAddressList" :key="address.id">
-        <span class="username" :class="{ selected: address.isDefault == 1 }">{{ address.consignee }}</span>
+      <div class="address clearFix" v-for="address in userAddressList" :key="address.id">
+        <span class="username" :class="{ selected: address.isDefault == 1 }">
+          {{
+            address.consignee
+          }}
+        </span>
         <p @click="changeDefault(address)">
           <span class="s1">{{ address.userAddress }}</span>
           <span class="s2">{{ address.phoneNum }}</span>
@@ -24,7 +28,7 @@
           class="username"
           :class="{ selected: payMethod == 1 }"
           @click="changePayMethod(1)"
-          style="margin-left:5px;"
+          style="margin-left: 5px"
         >货到付款</span>
       </div>
       <div class="line"></div>
@@ -40,7 +44,7 @@
         <h5>商品清单</h5>
         <ul class="list clearFix" v-for="good in detailArrayList" :key="good.skuId">
           <li>
-            <img :src="good.imgUrl" alt style="width: 100px; height:100px" />
+            <img :src="good.imgUrl" alt style="width: 100px; height: 100px" />
           </li>
           <li>
             <p>{{ good.skuName }}</p>
@@ -96,49 +100,68 @@
       </div>
     </div>
     <div class="sub clearFix">
-      <router-link class="subBtn" to="/pay">提交订单</router-link>
+      <a class="subBtn" @click="submitOrder">提交订单</a>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex"
+import { mapGetters, mapState } from "vuex";
 
 export default {
-  name: 'Trade',
+  name: "Trade",
   data() {
     return {
       payMethod: 0,
-      textContent: '', // 用户留言
-    }
+      textContent: "", // 用户留言
+    };
   },
   computed: {
     ...mapState({
-      tradeInfo: state => state.trade.tradeInfo
+      tradeInfo: (state) => state.trade.tradeInfo,
     }),
-    ...mapGetters(['userAddressList', 'detailArrayList']),
+    ...mapGetters(["userAddressList", "detailArrayList"]),
     selectedAddress() {
-      return this.userAddressList.find(element => element.isDefault == 1) || {}
-    }
+      return (
+        this.userAddressList.find((element) => element.isDefault == 1) || {}
+      );
+    },
   },
   mounted() {
-    this.getData()
+    this.getData();
   },
   methods: {
     getData() {
-      this.$store.dispatch('getTrade')
+      this.$store.dispatch("getTrade");
     },
     // 修改默认地址
     changeDefault(address) {
-      this.userAddressList.forEach(element => element.isDefault = '0')
-      address.isDefault = '1'
+      this.userAddressList.forEach((element) => (element.isDefault = "0"));
+      address.isDefault = "1";
     },
     // 修改支付方式
     changePayMethod(type) {
-      this.payMethod = type
-    }
+      this.payMethod = type;
+    },
+    // 提交订单
+    submitOrder() {
+      const { tradeNo } = this.tradeInfo;
+      const params = {
+        consignee: this.selectedAddress.consignee,
+        consigneeTel: this.selectedAddress.phoneNum,
+        deliveryAddress: this.selectedAddress.userAddress,
+        paymentWay: this.payMethod ? 'OFFLINE' : 'ONLINE',
+        orderComment: this.textContent,
+        orderDetailList: this.detailArrayList
+      };
+      this.$API.reqSubmitOrder(tradeNo, params).then((result) => {
+        this.$router.push(`/pay?orderId=${result}`)
+      }).catch((err) => {
+        alert(JSON.parse(err))
+      });
+    },
   },
-}
+};
 </script>
 
 <style lang="less" scoped>
