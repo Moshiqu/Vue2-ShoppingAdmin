@@ -69,9 +69,18 @@ export const reqGetPay = async orderId => {
 }
 
 // 查询支付订单状态
-
 export const reqGetPayStatus = async orderId => {
     const result = await requests({ url: `/payment/weixin/queryPayStatus/${orderId}`, method: "get" })
+    if (result.code == 200) {
+        return Promise.resolve(result.data)
+    } else {
+        return Promise.reject(result.message)
+    }
+}
+
+// 获取所有订单内容
+export const reqGetAllOrders = async (page, limit) => {
+    const result = await requests({ url: `/order/auth/${page}/${limit}`, method: 'get' })
     if (result.code == 200) {
         return Promise.resolve(result.data)
     } else {

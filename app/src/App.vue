@@ -16,12 +16,21 @@ export default {
   mounted() {
     // 通知vuex发送请求, 存储到仓库中
     this.$store.dispatch('getCategoryList')
+    // 判断是否有token
+    this.checkToken()
   },
   components: {
     Header,
     Footer
   },
   methods: {
+    checkToken() {
+      // 未登录
+      const token = localStorage.getItem("USER_TOKEN") || sessionStorage.getItem('USER_TOKEN')
+      if (token) {
+        this.$store.dispatch('getUserInfo')
+      }
+    }
   },
 }
 </script>

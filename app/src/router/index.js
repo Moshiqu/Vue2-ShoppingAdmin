@@ -63,14 +63,9 @@ router.beforeEach((to, from, next) => {
             }
         }
     } else {
-        // 未登录
-        const token = localStorage.getItem("USER_TOKEN") || sessionStorage.getItem('USER_TOKEN')
-        if (token) {
-            store.dispatch('getUserInfo').then((result) => {
-                next()
-            }).catch((err) => {
-                next('/login')
-            });
+        // 未登录状态下, 不能放行交易相关, 支付相关
+        if (to.path.indexOf('/trade') != -1 || to.path.indexOf('/pay') != -1 || to.path.indexOf('/center') != -1) {
+            next('/login?redirect=' + to.path)
         } else {
             next()
         }

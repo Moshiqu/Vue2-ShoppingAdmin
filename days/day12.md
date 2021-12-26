@@ -107,3 +107,61 @@ const generateQR = async text => {
   }
 }
 ```
+
+### 二级路由
+
+```JavaScript
+// 引入二级路由组件
+import MyOrder from "@/pages/Center/myOrder"
+import GroupOrder from "@/pages/Center/groupOrder"
+
+// center 为一级路由
+// 一级路由下可配置二级路由
+const router = [
+  {
+     path: '/center',
+     name: 'center',
+     component: Center,
+     // 二级路由
+     children: [
+        // 如果地址为'/center' 一级路由, 则重定向到/center/myorder 二级路由
+         {
+          path: '/center',
+          redirect: '/center/myorder'
+         },
+         {
+          path: 'myorder',
+          component: MyOrder
+         },
+          {
+           path: 'grouporder',
+           component: GroupOrder
+         }
+     ]
+   }
+]
+
+```
+
+### 路由独享守卫
+
+只针对当前的路由 next(false), 哪里来 回哪儿去
+
+```JavaScript
+const router = [
+  {
+    path: '/trade',
+    name: 'trade',
+    component: Trade,
+    // 路由独享守卫
+    beforeEnter: (to, from, next) => {
+        if (to.path == '/shopcart') {
+            next()
+        } else {
+            next(false)
+        }
+    }
+  }
+]
+
+```

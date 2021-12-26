@@ -105,9 +105,32 @@ Promise.all([p1,p2,p3])
     })
 ```
 
-### 路由独享首位
+### 路由独享守卫
 
 举例： 紫禁城【皇帝， 太后， 妃子】， 是相应的【皇帝， 太后， 妃子】路上的守卫， 只负责去皇帝|太后|妃子的路上的排查
+
+#### 路由独享守卫 只针对当前的路由
+
+只针对当前的路由 next(false), 哪里来 回哪儿去
+
+```JavaScript
+const router = [
+  {
+    path: '/trade',
+    name: 'trade',
+    component: Trade,
+    // 路由独享守卫
+    beforeEnter: (to, from, next) => {
+        if (to.path == '/shopcart') {
+            next()
+        } else {
+            next(false)
+        }
+    }
+  }
+]
+
+```
 
 ### 组件内守卫
 

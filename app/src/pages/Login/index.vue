@@ -77,8 +77,8 @@ export default {
   name: 'Login',
   data() {
     return {
-      phoneNum: '',
-      password: '',
+      phoneNum: '19136154312',
+      password: 'Moshiqu3332',
       isAuto: false, // 是否自动登录
     }
   },
@@ -87,7 +87,11 @@ export default {
       if (this.phoneNum && this.password) {
         this.$store.dispatch('loginByPassword', { phone: this.phoneNum, password: this.password, isAuto: this.isAuto })
           .then((result) => {
-            this.$router.push('/home')
+            if (this.$route.query) {
+              this.$router.push(this.$route.query.redirect)
+            } else {
+              this.$router.push('/home')
+            }
           }).catch((err) => {
             alert(err.message)
           });

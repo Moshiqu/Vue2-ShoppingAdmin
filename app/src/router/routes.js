@@ -67,12 +67,27 @@ const routes = [
     {
         path: '/trade',
         name: 'trade',
-        component: Trade
+        component: Trade,
+        // 路由独享守卫
+        beforeEnter: (to, from, next) => {
+            if (to.path == '/shopcart') {
+                next()
+            } else {
+                next(false)
+            }
+        }
     },
     {
         path: '/pay',
         name: 'pay',
-        component: Pay
+        component: Pay,
+        beforeEnter: (to, from, next) => {
+            if (to.path == '/trade') {
+                next()
+            } else {
+                next(false)
+            }
+        }
     }, {
         path: '/paysuccess',
         name: "paysuccess",
