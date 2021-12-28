@@ -256,3 +256,70 @@ npm install --save vee-validate@2 安装 2 版本的
       meta: { show: true }
   }
 ```
+
+### 代码打包
+
+npm run build
+项目打包后, 代码都是经过压缩加密的, 如果运行时报错, 输出的错误信息无法准确得知是哪里的代码报错
+所以该文件项目不需要是可以去除掉
+
+vue.config.js 配置
+productionSourceMap:false
+
+### 服务器
+
+1、前端开发。完成网页的前端展示页面，也就是用户能看到的部分。相关的技术关键词是 HTML、CSS、JS。先掌握核心基础的部分（而且这部分也够用了），不要上来就搞什么 vue、angular、react，这些对新手来说，会把问题搞复杂，很容易挫败你。
+
+2、后端开发。后端可选的语言比较多，容易上手对新手友好的，有 PHP、Python 等，其他像 node、java 之类的不太建议新手使用，起步的门槛稍微高点。所有后端语言学习的时候都会涉及到数据库的操作，顺便学习一些 sql 基础即可满足开发需求。
+
+掌握以上两部分，你就可以开发出一个完整的可交互的网站了，如果觉得页面不够美观，可以学习下 UI 设计，或者使用一些成熟的 UI 框架。
+
+处理服务器流程参考: https://www.bilibili.com/video/BV1Vf4y1T7bw?p=110
+
+#### 购买服务器
+
+1. 阿里云
+2. 腾讯云: 星星海云服务器 首年 99
+
+#### 设置安全组
+
+#### 利用 xshell6 工具登录服务器 (命令行)
+
+1. 需要会基础 Linux 指令
+
+#### Xftp7 将本地的文件上传到云服务器 (可视化)
+
+#### nginx 反向代理
+
+1. 为什么访问 ip 地址, 就可以访问到项目?
+   例如 ip 地址为: http://82.156.11.187/
+   在服务器上 => /root/jch/www/shangpinhui/dist (前端代码), 用户访问http://82.156.11.187/, 如何让用户直接访问到 dist 中的 index 文件?
+
+2. 项目数据来自http://39.98.123.211, 不是当前的服务器
+
+##### nginx
+
+1. xshell 进入根目录 /etc
+2. 进入 etc 目录, 在该目录下有一个 nginx 目录, 进入 nginx 目录[如果没安装过 nginx, 只有 4-5 个文件]
+3. 如果要安装 nginx, yum install nginx
+4. 安装完 nginx, nginx 目录下会有一个 nginx.conf 文件, 要在 nginx.conf 文件中进行编辑, 配置 nginx
+5. 进行编辑 nginx.config 文件: vim nginx.conf (指令), 主要添加如下两项
+
+(不能直接粘贴复制)
+
+```解决第一个问题 1. 为什么访问 ip 地址, 就可以访问到项目?
+   location / {
+    root /root/jch/www/shangpinhui/dist;
+    index index.html;
+    try_files $url $url/ index.html;
+   }
+```
+
+```解决第二个问题 2. 项目数据来自http://39.98.123.211, 不是当前的服务器
+  location /api{
+    proxy_pass http://39.98.123.211;
+  }
+```
+
+6. 启动 nginx 服务器
+   service nginx start

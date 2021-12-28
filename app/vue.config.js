@@ -1,4 +1,6 @@
 module.exports = {
+    //打包后不要map文件夹
+    productionSourceMap: false,
     // 关闭eslint
     lintOnSave: false,
     // 代理跨域
