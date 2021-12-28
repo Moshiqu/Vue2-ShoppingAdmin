@@ -242,3 +242,17 @@ npm install --save vee-validate@2 安装 2 版本的
 ```
 
 ### 空数组和空对象的布尔值是 true
+
+### 路由懒加载
+
+当打包构建应用时，JavaScript 包会变得非常大，影响页面加载。
+如果我们能把不同路由对应的组件分割成不同的代码块，然后当路由被访问的时候才加载对应组件，这样就更加高效了。
+
+```JavaScript
+  {
+      path: '/home',
+      // 路由懒加载, 只有在使用该路由时, 才会引入该路由
+      component: () => import('@/pages/Home'),
+      meta: { show: true }
+  }
+```
