@@ -32,6 +32,20 @@ Vue.component(Button.name, Button)
 Vue.prototype.$msgbox = MessageBox;
 Vue.prototype.$alert = MessageBox.alert;
 
+// 引入图片懒加载
+import vueLazyLoad from 'vue-lazyload'
+// 引入懒加载图片
+import lazyImg from "@/assets/images/lazyGif.gif"
+
+Vue.use(vueLazyLoad, {
+  preLoad: 1.3,
+  error: 'dist/error.png',
+  loading: lazyImg,
+  attempt: 1
+})
+
+// 引入vee-validate 插件
+import "@/plugins/validate"
 
 new Vue({
   render: h => h(App),

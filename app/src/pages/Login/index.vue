@@ -17,11 +17,29 @@
             <form action="##" @submit.prevent>
               <div class="input-text clearFix">
                 <span></span>
-                <input type="text" placeholder="邮箱/用户名/手机号" v-model="phoneNum" />
+                <!-- <input type="text" placeholder="邮箱/用户名/手机号" v-model="phoneNum" /> -->
+                <input
+                  type="text"
+                  placeholder="手机号"
+                  v-model="phoneNum"
+                  name="phone"
+                  v-validate="{ required: true, regex: /^1(3\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\d|9[0-35-9])\d{8}$/ }"
+                  :class="{ invalid: errors.has('phone') }"
+                  maxlength="11"
+                />
+                <i class="error-msg">{{ errors.first('phone') }}</i>
               </div>
               <div class="input-text clearFix">
                 <span class="pwd"></span>
-                <input type="text" placeholder="请输入密码" v-model="password" />
+                <input
+                  type="text"
+                  placeholder="请输入密码"
+                  v-model="password"
+                  name="password"
+                  v-validate="{ required: true, regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/ }"
+                  :class="{ valid: errors.has('password') }"
+                />
+                <i class="error-msg">{{ errors.first('password') }}</i>
               </div>
               <div class="setting clearFix">
                 <label class="checkbox inline">
@@ -83,11 +101,12 @@ export default {
     }
   },
   methods: {
-    login() {
-      if (this.phoneNum && this.password) {
+    async login() {
+      const isSuccess = await this.$validator.validateAll()
+      if (isSuccess) {
         this.$store.dispatch('loginByPassword', { phone: this.phoneNum, password: this.password, isAuto: this.isAuto })
           .then((result) => {
-            if (this.$route.query) {
+            if (JSON.stringify(this.$route.query) !== "{}") {
               this.$router.push(this.$route.query.redirect)
             } else {
               this.$router.push('/home')

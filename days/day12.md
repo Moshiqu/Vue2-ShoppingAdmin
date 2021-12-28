@@ -165,3 +165,80 @@ const router = [
 ]
 
 ```
+
+## 12.28
+
+### 图片懒加载
+
+npm i --save vue-lazyload
+
+```JavaScript
+  // 引入图片懒加载
+  import vueLazyLoad from 'vue-lazyload'
+  // 引入懒加载图片
+  import lazyImg from "@/assets/images/lazyGif.gif"
+
+  Vue.use(vueLazyLoad, {
+    preLoad: 1.3,
+    error: 'dist/error.png',
+    loading: lazyImg,
+    attempt: 1
+  })
+```
+
+### 表单验证插件
+
+npm install --save vee-validate@2 安装 2 版本的
+
+```JavaScript
+  // vee-validate 表单验证
+  // mian.js 入口文件
+  import Vue from 'vue'
+  import VeeValidate from 'vee-validate'
+  import zh_CN from 'vee-validate/dist/locale/zh_CN'
+
+  Vue.use(VeeValidate)
+
+  VeeValidate.Validator.localize('zh_CN', {
+      messages: {
+          ...zh_CN.messages,
+      },
+      attributes: {
+          phone: '手机号',
+          password: '密码'
+      }
+  })
+```
+
+```JavaScript
+<input
+    type="text"
+    placeholder="手机号"
+    maxlength="11"
+    v-model="phoneNum"
+    name="phone"
+    v-validate="{ required: true, regex: /^1(3\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\d|9[0-35-9])\d{8}$/ }"
+    v-bind:class="{ invalid: errors.has('phone') }"
+  />
+<i class="error-msg">{{ errors.first('phone') }}</i>
+```
+
+```JavaScript
+  async login() {
+      const isSuccess = await this.$validator.validateAll()
+      if (isSuccess) {
+        this.$store.dispatch('loginByPassword', { phone: this.phoneNum, password: this.password, isAuto: this.isAuto })
+          .then((result) => {
+            if (JSON.stringify(this.$route.query) !== "{}") {
+              this.$router.push(this.$route.query.redirect)
+            } else {
+              this.$router.push('/home')
+            }
+          }).catch((err) => {
+            alert(err.message)
+          });
+      }
+    }
+```
+
+### 空数组和空对象的布尔值是 true

@@ -42,6 +42,7 @@ const actions = {
         const { phone, password, isAuto } = params
         const result = await reqLogin({ phone, password })
         if (result.code == 200) {
+            console.log(13);
             if (isAuto) {
                 localStorage.setItem('USER_TOKEN', result.data.token)
             } else {
