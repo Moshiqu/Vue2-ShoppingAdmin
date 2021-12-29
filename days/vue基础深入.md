@@ -1,6 +1,8 @@
-## 组件通信方式
+## 12.28
 
-### props
+### 组件通信方式
+
+#### props
 
 适用场景: 父子组件通信
 注意事项:
@@ -11,7 +13,7 @@
 小提示: 路由的 props
 书写形式: 布尔值, 对象, 函数形式
 
-### 自定义事件
+#### 自定义事件
 
 适用场景: 子组件给父组件通信
 $on, $emit
@@ -23,13 +25,13 @@ $on, $emit
     @test='test($event, otherParams…)'
 ```
 
-### 全局事件总线
+#### 全局事件总线
 
 适用场景: 万能
 
 Vue.prototype.$bus = bus
 
-### pubsub-js, 在 react 中使用较多(发布, 订阅), vue 中几乎不使用
+#### pubsub-js, 在 react 中使用较多(发布, 订阅), vue 中几乎不使用
 
 适用场景: 万能
 
@@ -44,7 +46,7 @@ Vue.prototype.$bus = bus
 具名插槽
 作用域插槽
 
-## 事件(event)注意事项
+### 事件(event)注意事项
 
 事件:
 
@@ -67,39 +69,39 @@ Vue.prototype.$bus = bus
 // 添加.native 修饰符可以起作用 .native, 将自定义事件变为原生事件, (其实是给子组件的更节点添加了点击事件, 利用事件委派)
 <Event1 @click.native="handler">子组件</Event1>
 
-## v-model
+### v-model
 
 v-model 是 vue 框架中的指令, 主要结合表单元素使用(input, 复选框, 单选框, 等等)
 主要作用是收集表单数据
 
-## 属性修饰符 .sync
+### 属性修饰符 .sync
 
 可以实现父子组件数据的同步, 相当于给子组件传了一个 props 为 money, 以及一个自定义事件"update:money"
 
 父组件内: <Child :money.sync='money'>
 子组件内: <button @click="$emit('update:money',money-100)">使用</button>
 
-## $attrs, $listeners
+### $attrs, $listeners
 
 组件实例的属性, 可以获取父组件给子组件传递的 props 和自定义事件
 
-## $children, $parent
+### $children, $parent
 
-### $children 是组件实例的属性, 可以获取到所有的子组件实例
+#### $children 是组件实例的属性, 可以获取到所有的子组件实例
 
     this.$children.forEach(item=>{
         item.money-=200
     })
 
-### $parent 是组件实例的属性, 可以获取到当前子组件的父组件
+#### $parent 是组件实例的属性, 可以获取到当前子组件的父组件
 
     this.$parent.money +=50
 
-## 混入 mixin
+### 混入 mixin
 
 如果项目当中出现很多结构类似功能, 可以考虑组件服用
 如果项目当中很多组件 js 业务逻辑相似, 想到 mixin. 【可以把多个组件 js 相同部分抽离出来, 使用 mixins】
 
-## 插槽
+### 插槽
 
 可以实现父子组件通信, 通信的是结构
