@@ -20,3 +20,5 @@ this.tradeMarkForm,tradeMark 对象内都是简单类型的数据, 可以使用�
 ```JavaScript
     this.tradeMarkForm = { ...tradeMark }
 ```
+
+## 12.30
