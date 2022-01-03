@@ -107,7 +107,7 @@ export default {
   data() {
     return {
       pageIndex: 1,
-      pageSize: 3,
+      pageSize: 5,
       total: 0,
       list: [],
       dialogFormVisible: false, // 对话框显示与隐藏
