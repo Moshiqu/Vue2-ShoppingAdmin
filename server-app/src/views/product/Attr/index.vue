@@ -1,10 +1,7 @@
 <template>
   <div>
     <el-card class="mt20">
-      <CategorySelector
-        @getCategoryForm="getCategoryForm"
-        :valid="!isShowTable"
-      />
+      <CategorySelector @getCategoryForm="getCategoryForm" :valid="!isShowTable" />
     </el-card>
     <el-card v-show="isShowTable">
       <el-button
@@ -13,37 +10,23 @@
         icon="el-icon-plus"
         @click="addAttr"
         :disabled="!cateForm.cate3Id"
-        >添加商品</el-button
-      >
+      >添加商品</el-button>
       <el-table :data="attrsList" border stripe class="mt20">
-        <el-table-column type="index" label="序号" width="80" align="center">
-        </el-table-column>
-        <el-table-column prop="attrName" label="属性名称" width="150">
-        </el-table-column>
+        <el-table-column type="index" label="序号" width="80" align="center"></el-table-column>
+        <el-table-column prop="attrName" label="属性名称" width="150"></el-table-column>
         <el-table-column label="属性值列表">
           <template slot-scope="{ row }">
             <el-tag
               :key="tag.id"
               v-for="tag in row.attrValueList"
               :disable-transitions="false"
-            >
-              {{ tag.valueName }}
-            </el-tag>
+            >{{ tag.valueName }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="150">
           <template slot-scope="{ row }">
-            <el-button
-              type="warning"
-              size="mini"
-              icon="el-icon-edit"
-              @click="editAttr(row)"
-            ></el-button>
-            <el-button
-              type="danger"
-              size="mini"
-              icon="el-icon-delete"
-            ></el-button>
+            <el-button type="warning" size="mini" icon="el-icon-edit" @click="editAttr(row)"></el-button>
+            <el-button type="danger" size="mini" icon="el-icon-delete"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -51,8 +34,7 @@
     <el-card v-show="!isShowTable">
       <el-form ref="form" :inline="true" size="normal" :model="attrInfo">
         <el-form-item label="属性名">
-          <el-input placeholder="请输入属性名" v-model="attrInfo.attrName">
-          </el-input>
+          <el-input placeholder="请输入属性名" v-model="attrInfo.attrName"></el-input>
         </el-form-item>
       </el-form>
       <el-button
@@ -61,21 +43,12 @@
         @click="addAttrValue"
         icon="el-icon-plus"
         :disabled="!attrInfo.attrName"
-        >添加属性值</el-button
-      >
-      <el-button @click="isShowTable = true"> 取消 </el-button>
+      >添加属性值</el-button>
+      <el-button @click="isShowTable = true">取消</el-button>
 
       <el-table border stripe class="mt20" :data="attrInfo.attrValueList">
-        <el-table-column
-          type="index"
-          align="center"
-          label="序号"
-          width="150"
-        ></el-table-column>
-        <el-table-column
-          :prop="attrInfo.attrValueList.valueName"
-          label="属性值名称"
-        >
+        <el-table-column type="index" align="center" label="序号" width="150"></el-table-column>
+        <el-table-column :prop="attrInfo.attrValueList.valueName" label="属性值名称">
           <template slot-scope="{ row, $index }">
             <el-input
               v-model="row.valueName"
@@ -91,8 +64,7 @@
               style="display: block"
               @dblclick="handlerDbclick(row, $index)"
               v-else
-              >{{ row.valueName }}</span
-            >
+            >{{ row.valueName }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="150">
@@ -105,12 +77,7 @@
               :title="`确定要删除${row.valueName}？`"
               @onConfirm="deleteValue($index)"
             >
-              <el-button
-                type="danger"
-                size="mini"
-                icon="el-icon-delete"
-                slot="reference"
-              ></el-button>
+              <el-button type="danger" size="mini" icon="el-icon-delete" slot="reference"></el-button>
             </el-popconfirm>
           </template>
         </el-table-column>
@@ -120,20 +87,15 @@
         size="default"
         @click="save"
         :disabled="attrInfo.attrName && !attrInfo.attrValueList.length"
-        >保存</el-button
-      >
+      >保存</el-button>
       <el-button @click="isShowTable = true">取消</el-button>
     </el-card>
   </div>
 </template>
 
 <script>
-import CategorySelector from "@/components/CategorySelector";
 export default {
   name: "Attr",
-  components: {
-    CategorySelector,
-  },
   data() {
     return {
       attrsList: [],
@@ -147,16 +109,27 @@ export default {
       }, //收集或新增的数据表
     };
   },
+  watch: {
+    cateForm: {
+      handler(n) {
+        if (!n.cate3Id) {
+          this.attrsList = []
+        }
+      },
+      deep: true
+    }
+  },
   methods: {
     // 自定义事件回调 传回来的是分类的id
     getCategoryForm(cateForm) {
       this.cateForm = cateForm;
+      // 获取数据列表
       this.$API.attr
         .reqGetAttrsList(cateForm)
         .then((result) => {
           this.attrsList = result.data;
         })
-        .catch((err) => {});
+        .catch((err) => {}) ;
     },
     // 添加属性
     addAttr() {
@@ -252,7 +225,7 @@ export default {
         });
     },
     //取消
-    cancel() {},
+    cancel() {}, 
   },
 };
 </script>
