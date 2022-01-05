@@ -97,7 +97,7 @@
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="save">保存</el-button>
-            <el-button @click="$emit('changeScene', 0)">取消</el-button>
+            <el-button @click="cancel">取消</el-button>
         </el-form-item>
     </el-form>
 </template>
@@ -115,7 +115,7 @@ export default {
             spuInfo: {
                 category3Id: 0,
                 description: "",
-                tmId: 0, // 品牌id
+                tmId: '', // 品牌id
                 spuName: '',
                 spuImageList: [
                     // {
@@ -159,7 +159,7 @@ export default {
         }
     },
     methods: {
-        // 获取品牌列表 | 获取销售属性列表 | 获取spu数据
+        // 获取品牌列表 | 获取销售属性列表 | 获取spu数据 修改
         initData(spuId) {
             // 获取品牌列表
             this.$API.spu.reqGetTradeMarkList().then((result) => {
@@ -190,6 +190,22 @@ export default {
                     item.url = item.imgUrl
                 })
                 this.spuImageList = arr
+            }).catch((err) => {
+                console.log(err);
+            });
+        },
+        // 获取品牌列表 | 获取销售属性列表 | 获取spu数据 新增
+        createData(cate3Id) {
+            this.spuInfo.category3Id = cate3Id
+            // 获取品牌列表
+            this.$API.spu.reqGetTradeMarkList().then((result) => {
+                this.tradeMarkList = result.data
+            }).catch((err) => {
+                console.log(err);
+            });
+            // 获取销售属性列表
+            this.$API.spu.reqGetAttrList().then((result) => {
+                this.attrList = result.data
             }).catch((err) => {
                 console.log(err);
             });
@@ -265,10 +281,21 @@ export default {
                     type: 'success',
                     message: '保存成功'
                 })
-                this.$emit('changeScene', 0)
+                // flag 为true, 修改; false, 添加
+                this.$emit('changeScene', { scene: 0, flag: this.spuInfo.id ? true : false })
+                this.cleanData()
             }).catch((err) => {
 
             });
+        },
+        // 取消按钮
+        cancel() {
+            this.$emit('changeScene', { scene: 0, flag: true })
+            this.cleanData()
+        },
+        // 清除数据
+        cleanData() {
+            Object.assign(this._data, this.$options.data())
         }
     },
 }

@@ -62,3 +62,26 @@ Vue 只能检测到数组的修改和替换, 无法检测到新增
 ```
 
 ## 1.4
+
+## 1.5
+
+### 清理数据, 使data中的数据恢复为最初的样子(初始化时的版本)
+```JavaScript
+    // Object.assign() ES6中 合并对象的方法
+    // 组件实例 this._data, 可以操作data当中响应式数据
+    // this.$options可以获取配置对象, 配置对象的data函数执行, 返回响应式数据
+    Object.assign(this._data, this.$options.data())
+```
+
+### 对象新增键值对
+```JavaScript
+    // this.spuInfo.spuImageList 为一个全是对象的数组
+    // Array.map() 映射
+    // 使this.spuInfo.spuImageList数组中的所有对象新增imgName, 并且imgName的值为对象中的name的值
+    this.spuInfo.spuImageList = this.spuImageList.map(item => {
+        return {
+            imgName: item.name,
+            imgUrl: (item.response && item.response.data) || item.url
+        }
+    })
+```

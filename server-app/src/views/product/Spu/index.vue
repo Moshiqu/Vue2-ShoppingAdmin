@@ -42,13 +42,15 @@
               icon="el-icon-info"
               title="查看当前spu全部sku列表"
             ></HintButton>
-            <HintButton
-              type="danger"
-              size="mini"
-              @click="add(row)"
-              icon="el-icon-delete"
-              title="删除spu"
-            ></HintButton>
+            <el-popconfirm title="这是一段内容确定删除吗？" @onConfirm="deleteSpu(row)">
+              <HintButton
+                type="danger"
+                size="mini"
+                icon="el-icon-delete"
+                title="删除spu"
+                slot="reference"
+              ></HintButton>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -120,9 +122,10 @@ export default {
         .catch((err) => { console.log(err); });
     },
     // 添加SPU按钮
-    addSPU(row) {
+    addSPU() {
       this.scene = 1
       console.log('添加SPU按钮');
+      this.$refs.spuRef.createData(this.cateForm.cate3Id)
     },
     // 修改Spu按钮
     editSpu(row) {
@@ -136,14 +139,33 @@ export default {
       console.log('添加sku按钮');
     },
     // 修改场景值
-    changeScene(scene) {
+    changeScene({ scene, flag }) {
+      // flag 为true, 修改; false, 添加
       this.scene = scene
-      this.getSpuList(this.pageIndex)
+      if (flag) {
+        this.getSpuList(this.pageIndex)
+      } else {
+        this.getSpuList()
+      }
     },
+    // 改变分页器中的pageSize
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
       this.getSpuList();
     },
+    // 删除spu
+    deleteSpu(row) {
+      console.log(row);
+      this.$API.spu.reqDeleteSpu(row.id).then((result) => {
+        this.$message({
+          type: 'success',
+          message: '删除SPU成功'
+        })
+        this.getSpuList(this.spuList.length > 1 ? this.pageIndex : this.pageIndex - 1)
+      }).catch((err) => {
+
+      });
+    }
   },
   components: { SpuForm, SkuForm }
 };
