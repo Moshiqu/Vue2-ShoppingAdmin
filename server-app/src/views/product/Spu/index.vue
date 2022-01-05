@@ -73,7 +73,7 @@
     </el-card>
     <!-- 添加或修改sku -->
     <el-card class="mt20" v-show="scene == 2">
-      <SkuForm></SkuForm>
+      <SkuForm @changeScene="changeScene" ref="skuRef"></SkuForm>
     </el-card>
   </div>
 </template>
@@ -137,11 +137,15 @@ export default {
     addSku(row) {
       this.scene = 2
       console.log('添加sku按钮');
+      this.$refs.skuRef.initData(row, this.cateForm)
     },
     // 修改场景值
-    changeScene({ scene, flag }) {
-      // flag 为true, 修改; false, 添加
+    changeScene({ scene, flag }, reload = true) {
+      // reload 为true, 重新加载数据; false, 不需要重新加载数据
+      // flag 为true, 修改(当前页); false, 添加(第一页)
       this.scene = scene
+      if (!reload) return
+
       if (flag) {
         this.getSpuList(this.pageIndex)
       } else {
@@ -165,7 +169,7 @@ export default {
       }).catch((err) => {
 
       });
-    }
+    },
   },
   components: { SpuForm, SkuForm }
 };

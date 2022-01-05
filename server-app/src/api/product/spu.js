@@ -27,3 +27,12 @@ export const reqSaveOrUpdateSpu = data => {
 
 // 删除spu DELETE /admin/product/deleteSpu/{spuId}
 export const reqDeleteSpu = spuId => request({ url: `/admin/product/deleteSpu/${spuId}`, method: 'delete' })
+
+// 获取spu的销售属性列表 GET /admin/product/spuSaleAttrList/{spuId}
+export const reqGetSpuSaleAttrList = spuId => request({ url: `/admin/product/spuSaleAttrList/${spuId}`, method: 'get' })
+
+// 获取属性信息列表 GET /admin/product/attrInfoList/{category1Id}/{category2Id}/{category3Id}
+export const reqGetAttrInfoList = ({ category1Id, category2Id, category3Id }) => request({ url: `/admin/product/attrInfoList/${category1Id}/${category2Id}/${category3Id}`, method: 'get' })
+
+// 保存sku信息 POST /admin/product/saveSkuInfo
+export const reqSaveSkuInfo = data => request({ url: "/admin/product/saveSkuInfo", method: "post", data })
