@@ -36,3 +36,6 @@ export const reqGetAttrInfoList = ({ category1Id, category2Id, category3Id }) =>
 
 // 保存sku信息 POST /admin/product/saveSkuInfo
 export const reqSaveSkuInfo = data => request({ url: "/admin/product/saveSkuInfo", method: "post", data })
+
+// 根据spuId 获取所有SKU信息 GET /admin/product/findBySpuId/{spuId}
+export const reqGetSkuBySpuId = spuId => request({ url: `/admin/product/findBySpuId/${spuId}`, method: 'get' })

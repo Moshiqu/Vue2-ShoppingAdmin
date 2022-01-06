@@ -38,7 +38,7 @@
             <HintButton
               type="info"
               size="mini"
-              @click="add(row)"
+              @click="checkSku(row)"
               icon="el-icon-info"
               title="查看当前spu全部sku列表"
             ></HintButton>
@@ -75,6 +75,23 @@
     <el-card class="mt20" v-show="scene == 2">
       <SkuForm @changeScene="changeScene" ref="skuRef"></SkuForm>
     </el-card>
+
+    <el-dialog
+      :title="`${selectedSpu.spuName}的SKU列表`"
+      :visible.sync="dialogSkuInfoVisible"
+      :before-close="closeDialog"
+    >
+      <el-table :data="skuInfoList" v-loading="isLoding">
+        <el-table-column prop="skuName" label="名称"></el-table-column>
+        <el-table-column prop="price" label="价格"></el-table-column>
+        <el-table-column prop="weight" label="重量"></el-table-column>
+        <el-table-column label="默认图片">
+          <template slot-scope="{row}">
+            <img :src="row.skuDefaultImg" :alt="row.skuDesc" class="imgBox" />
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -91,6 +108,10 @@ export default {
       pageSize: 3,
       total: 0,
       scene: 0, // 0: 展示spu; 1: 添加spu; 2: 添加或修改sku
+      dialogSkuInfoVisible: false, // sku对话框
+      skuInfoList: [], // sku信息
+      selectedSpu: {}, // 查看sku的spu
+      isLoding: true, // sku表格的loading
     };
   },
   watch: {
@@ -170,6 +191,25 @@ export default {
 
       });
     },
+    // 获取sku信息
+    checkSku(spu) {
+      // 获取数据
+      this.selectedSpu = spu
+      this.dialogSkuInfoVisible = true
+      this.$API.spu.reqGetSkuBySpuId(spu.id).then((result) => {
+        this.skuInfoList = result.data
+        this.isLoding = false
+      }).catch((err) => {
+      });
+    },
+    //关闭dialog
+    closeDialog(done) {
+      // 清空数据
+      this.skuInfoList = []
+      this.selectedSpu = {}
+      this.isLoding = true
+      done()
+    }
   },
   components: { SpuForm, SkuForm }
 };
@@ -178,5 +218,10 @@ export default {
 <style lang="less">
 .mt20 {
   margin: 20px 0;
+}
+
+.imgBox {
+  width: 150px;
+  height: 150px;
 }
 </style>
