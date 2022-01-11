@@ -6,10 +6,10 @@
                 <el-tab-pane label="访问量" name="visit"></el-tab-pane>
             </el-tabs>
             <div class="left-box">
-                <span>今日</span>
-                <span>本周</span>
-                <span>本月</span>
-                <span>本年</span>
+                <span @click="setDay">今日</span>
+                <span @click="setWeek">本周</span>
+                <span @click="setMonth">本月</span>
+                <span @click="setYear">本年</span>
                 <el-date-picker
                     type="daterange"
                     range-separator="-"
@@ -17,6 +17,8 @@
                     end-placeholder="结束日期"
                     size="mini"
                     class="date-picker"
+                    v-model="date"
+                    value-format="yyyy-MM-dd"
                 ></el-date-picker>
             </div>
         </div>
@@ -69,11 +71,14 @@
 
 <script>
 import * as echarts from 'echarts'
+import dayjs from 'dayjs'
 export default {
     name: 'Sale',
     data() {
         return {
-            activeName: 'sale'
+            activeName: 'sale',
+            date: [],
+            dateFormat: 'YYYY-MM-DD'
         }
     },
     computed: {
@@ -131,6 +136,26 @@ export default {
                     containLabel: true
                 }
             })
+        },
+        // 设置当天
+        setDay() {
+            const day = dayjs().format(this.dateFormat)
+            this.date = [day, day]
+        },
+        setWeek() {
+            const start = dayjs().day(1).format(this.dateFormat)
+            const end = dayjs().day(7).format(this.dateFormat)
+            this.date = [start, end]
+        },
+        setMonth() {
+            const start = dayjs().startOf('month').format(this.dateFormat)
+            const end = dayjs().endOf('month').format(this.dateFormat)
+            this.date = [start, end]
+        },
+        setYear() {
+            const start = dayjs().startOf('year').format(this.dateFormat)
+            const end = dayjs().endOf('year').format(this.dateFormat)
+            this.date = [start, end]
         }
     },
 }
@@ -208,7 +233,7 @@ export default {
         margin: 0 5px;
     }
     .date-picker {
-        width: 200px;
+        width: 250px;
         margin: 0 20px;
     }
 }
