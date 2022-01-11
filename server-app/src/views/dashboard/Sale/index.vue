@@ -2,51 +2,8 @@
     <el-card shadow="always" class="card">
         <div class="card-box">
             <el-tabs v-model="activeName" class="right-box">
-                <el-tab-pane label="销售额" name="销售额">
-                    <el-row :gutter="20">
-                        <el-col :span="18">
-                            <div class="bar-chart" ref="barRef"></div>
-                        </el-col>
-                        <el-col :span="6">
-                            <div class="topList">
-                                <span class="topList-title">门店销售额排名</span>
-                                <ul>
-                                    <li>
-                                        <span class="topList-left">1</span>
-                                        <span class="topList-center">肯德基</span>
-                                        <span class="topList-rigth">323,234</span>
-                                    </li>
-                                    <li>
-                                        <span class="topList-left">2</span>
-                                        <span class="topList-center">肯德基</span>
-                                        <span class="topList-rigth">323,234</span>
-                                    </li>
-                                    <li>
-                                        <span class="topList-left">3</span>
-                                        <span class="topList-center">肯德基</span>
-                                        <span class="topList-rigth">323,234</span>
-                                    </li>
-                                    <li>
-                                        <span class="topList-left">4</span>
-                                        <span class="topList-center">肯德基</span>
-                                        <span class="topList-rigth">323,234</span>
-                                    </li>
-                                    <li>
-                                        <span class="topList-left">5</span>
-                                        <span class="topList-center">肯德基</span>
-                                        <span class="topList-rigth">323,234</span>
-                                    </li>
-                                    <li>
-                                        <span class="topList-left">6</span>
-                                        <span class="topList-center">肯德基</span>
-                                        <span class="topList-rigth">323,234</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </el-col>
-                    </el-row>
-                </el-tab-pane>
-                <el-tab-pane label="访问量" name="访问量">访问量</el-tab-pane>
+                <el-tab-pane label="销售额" name="sale"></el-tab-pane>
+                <el-tab-pane label="访问量" name="visit"></el-tab-pane>
             </el-tabs>
             <div class="left-box">
                 <span>今日</span>
@@ -63,6 +20,50 @@
                 ></el-date-picker>
             </div>
         </div>
+        <div class="chart-box">
+            <el-row :gutter="20">
+                <el-col :span="18">
+                    <div class="bar-chart" ref="barRef"></div>
+                </el-col>
+                <el-col :span="6">
+                    <div class="topList">
+                        <span class="topList-title">门店{{ title }}排名</span>
+                        <ul>
+                            <li class="topList-item">
+                                <span>1</span>
+                                <span>肯德基</span>
+                                <span>323,234</span>
+                            </li>
+                            <li class="topList-item">
+                                <span>2</span>
+                                <span>肯德基</span>
+                                <span>323,234</span>
+                            </li>
+                            <li class="topList-item">
+                                <span>3</span>
+                                <span>肯德基</span>
+                                <span>323,234</span>
+                            </li>
+                            <li class="topList-item">
+                                <span>4</span>
+                                <span>肯德基</span>
+                                <span>323,234</span>
+                            </li>
+                            <li class="topList-item">
+                                <span>5</span>
+                                <span>肯德基</span>
+                                <span>323,234</span>
+                            </li>
+                            <li class="topList-item">
+                                <span>6</span>
+                                <span>肯德基</span>
+                                <span>323,234</span>
+                            </li>
+                        </ul>
+                    </div>
+                </el-col>
+            </el-row>
+        </div>
     </el-card>
 </template>
 
@@ -72,7 +73,22 @@ export default {
     name: 'Sale',
     data() {
         return {
-            activeName: '销售额'
+            activeName: 'sale'
+        }
+    },
+    computed: {
+        title() {
+            return this.activeName == 'sale' ? '销售额' : '访问量'
+        }
+    },
+    watch: {
+        activeName(nv, ov) {
+            let barChart = echarts.getInstanceByDom(this.$refs.barRef)
+            barChart.setOption({
+                title: {
+                    text: nv == 'sale' ? "销售额趋势" : "访问量趋势"
+                },
+            })
         }
     },
     mounted() {
@@ -132,9 +148,7 @@ export default {
     align-items: center;
 }
 
-.right-box {
-    width: 100%;
-
+.chart-box {
     .topList {
         .topList-title {
             font-size: 18px;
@@ -148,29 +162,39 @@ export default {
             width: 100%;
             height: 300px;
 
-            li {
+            .topList-item {
                 height: 15%;
 
-                .topList-left {
+                span:first-child {
                     display: inline-block;
-                    background-color: #000;
                     height: 20px;
                     width: 20px;
                     border-radius: 50%;
-                    color: #fff;
                     margin-right: 30px;
                     text-align: center;
                     line-height: 20px;
                     font-size: 14px;
                     box-sizing: border-box;
+                    color: #fff;
+                    background-color: #000;
                 }
 
-                .topList-rigth {
+                span:last-child {
                     float: right;
+                }
+            }
+
+            .topList-item:nth-child(n + 4) {
+                span:first-child {
+                    color: #000;
+                    background-color: #fff;
                 }
             }
         }
     }
+}
+.right-box {
+    width: 100%;
 }
 
 .left-box {
