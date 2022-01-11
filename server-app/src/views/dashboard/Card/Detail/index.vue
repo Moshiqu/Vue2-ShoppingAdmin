@@ -57,6 +57,7 @@ export default {
 
 .card-content {
     padding: 10px 0;
+    font-size: 30px;
 }
 
 .card-echarts {

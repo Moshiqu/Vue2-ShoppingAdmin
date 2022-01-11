@@ -53,28 +53,39 @@
                 </Detail>
             </el-card>
         </el-col>
+        <!-- 折线图 -->
         <el-col :span="6">
             <el-card shadow="always">
                 <Detail count="126560" title="访问量">
+                    <template slot="charts">
+                        <LineChart></LineChart>
+                    </template>
                     <template slot="footer">
                         <div>日访问量: 1234</div>
                     </template>
                 </Detail>
             </el-card>
         </el-col>
+        <!-- 柱状图 -->
         <el-col :span="6">
             <el-card shadow="always">
                 <Detail count="126560" title="支付笔数">
+                    <template slot="charts">
+                        <BarChart></BarChart>
+                    </template>
                     <template slot="footer">
                         <div>转化率: %66</div>
                     </template>
                 </Detail>
             </el-card>
         </el-col>
-
+        <!-- 横着的柱状图 -->
         <el-col :span="6">
             <el-card shadow="always">
                 <Detail count="78%" title="运营活动效果">
+                    <template slot="charts">
+                        <ProcessChart />
+                    </template>
                     <template slot="footer">
                         <div>转化率: %66</div>
                     </template>
@@ -86,9 +97,12 @@
 
 <script>
 import Detail from "./Detail/index.vue";
+import LineChart from "./LineChart/index.vue";
+import BarChart from "./BarChart/index.vue";
+import ProcessChart from "./ProcessChart/index.vue";
 export default {
     name: "Card",
-    components: { Detail }
+    components: { Detail, LineChart, BarChart, ProcessChart }
 }
 </script>
 
