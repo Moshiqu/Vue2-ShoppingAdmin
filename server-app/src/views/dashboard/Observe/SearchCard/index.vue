@@ -23,34 +23,22 @@
                 <LineChart title="人均搜索次数"></LineChart>
             </el-col>
         </el-row>
-        <el-table ref="filterTable" :data="tableData" style="width: 100%">
-            <el-table-column
-                prop="date"
-                label="日期"
-                sortable
-                width="180"
-                column-key="date"
-                :filters="[{ text: '2016-05-01', value: '2016-05-01' }, { text: '2016-05-02', value: '2016-05-02' }, { text: '2016-05-03', value: '2016-05-03' }, { text: '2016-05-04', value: '2016-05-04' }]"
-                :filter-method="filterHandler"
-            ></el-table-column>
-            <el-table-column prop="name" label="姓名" width="180"></el-table-column>
-            <el-table-column prop="address" label="地址" :formatter="formatter"></el-table-column>
-            <el-table-column
-                prop="tag"
-                label="标签"
-                width="100"
-                :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]"
-                :filter-method="filterTag"
-                filter-placement="bottom-end"
-            >
-                <template slot-scope="scope">
-                    <el-tag
-                        :type="scope.row.tag === '家' ? 'primary' : 'success'"
-                        disable-transitions
-                    >{{ scope.row.tag }}</el-tag>
-                </template>
-            </el-table-column>
+        <el-table
+            ref="filterTable"
+            border
+            :data="tableData"
+            stripe
+            style="width: 100%"
+            class="table"
+        >
+            <el-table-column type="index" align="center" label="排名" width="80" column-key="date"></el-table-column>
+            <el-table-column prop="keyword" label="搜索关键字" width="180"></el-table-column>
+            <el-table-column prop="userCount" label="用户数" sortable></el-table-column>
+            <el-table-column prop="rate" label="周涨幅" sortable></el-table-column>
         </el-table>
+        <!-- @size-change="sizeChange"
+        @current-change="currentChange"-->
+        <el-pagination layout="prev, pager, next" :total="1000" class="pagination"></el-pagination>
     </el-card>
 </template>
 
@@ -58,6 +46,11 @@
 import LineChart from "./LineChart/index.vue";
 export default {
     name: "Search",
+    data() {
+        return {
+            tableData: [{}]
+        }
+    },
     components: { LineChart }
 }
 </script>
@@ -67,5 +60,13 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.table {
+    margin-top: 10px;
+}
+
+.pagination {
+    float: right;
 }
 </style>
