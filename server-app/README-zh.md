@@ -18,11 +18,17 @@ npm run dev
 ```
 ## Screenshot 部分截图
 ### 登录
-![image]()
+![image](https://github.com/Moshiqu/Vue2-ShoppingAdmin/blob/main/server-app/screenshots/login.jpg)
 
+### 首页
+![image](https://github.com/Moshiqu/Vue2-ShoppingAdmin/blob/main/server-app/screenshots/home.jpg)
 
-## License
+### 品牌管理
+![image](https://github.com/Moshiqu/Vue2-ShoppingAdmin/blob/main/server-app/screenshots/mark.jpg)
 
-[MIT](https://github.com/PanJiaChen/vue-admin-template/blob/master/LICENSE) license.
+### SKU管理
+![image](https://github.com/Moshiqu/Vue2-ShoppingAdmin/blob/main/server-app/screenshots/sku.jpg)
 
-Copyright (c) 2017-present PanJiaChen
+### SPU管理
+![image](https://github.com/Moshiqu/Vue2-ShoppingAdmin/blob/main/server-app/screenshots/table.jpg)
+
