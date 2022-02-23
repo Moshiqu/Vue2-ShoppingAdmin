@@ -2,7 +2,10 @@
   <div id="app">
     <Header></Header>
     <!-- 路由组件出口 -->
-    <router-view></router-view>
+    <keep-alive include="Test">
+      <router-view></router-view>
+    </keep-alive>
+
     <Footer v-show="$route.meta.show"></Footer>
   </div>
 </template>

@@ -103,6 +103,14 @@ const routes = [
                 component: () => import('@/pages/Center/groupOrder')
             }
         ]
+    }, {
+        path: '/test',
+        name: 'test',
+        component: () => import('@/pages/Test'),
+    }, {
+        path: '/test2',
+        name: 'test2',
+        component: () => import('@/pages/Test2'),
     }
 ]
 
